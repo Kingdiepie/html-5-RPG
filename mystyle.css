@@ -63,6 +63,16 @@
   zindex: 2;
 
 }
+#q
+{
+  width: 128px;
+  height: 64px;
+  left: 990px;
+  position: absolute;
+  top: 320px;
+  zindex: 2;
+
+}
 #ls{
   left: 1022px;
   position: absolute;

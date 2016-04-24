@@ -9,6 +9,7 @@ var leftPress = false;
 var rightPress = false;
 var upPress = false;
 var downPress =  false;
+var qPress = false;
 var update = function(modifier) {
 houseSouth = false;
   hero.weapon = weapon1.atk;
@@ -109,7 +110,7 @@ houseSouth = false;
         }
       }
     }
-    else if (start === false&&32 in keysDown && (!(hero.y < 140  || hero.y > 240) ||
+    else if (start === false && 32 in keysDown && (!(hero.y < 140  || hero.y > 240) ||
     hero.x <oldcanvas.width - 75)) { // Player holding right
        start=true;
        hero.x= oldcanvas.width/2;
@@ -120,12 +121,11 @@ houseSouth = false;
     }
 
     }
-    else if(pause===true && 81 in keysDown){
+    else if(pause===true && (81 in keysDown || qPress ===true)){
 
         playIt();
         render();
         render2();
-
 
     }
 
@@ -197,12 +197,10 @@ if (pause === false){
         ++monstersCaught;
         pauseIt();
 
-
-
         //call battle
 
     }
-
+  
 
 
 }
@@ -303,22 +301,20 @@ var render2 = function() {
     //ctx.fillText('\uf100',80+988,128); // left
    // ctx.fillText('\uF101',176+988,128); // right
   //  ctx.fillText('\uf103',128+988,176); //down
-//
-    ctx.font = "bold 16px New Rocker";
+
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillStyle = "rgb(250, 250, 250)";
-    ctx.font = "24px New Rocker";
+    ctx.font = "20px New Rocker";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("Enemies Slayed : " + monstersCaught, 32, 64+480);
+    ctx.fillText("Enemies Slayed : " + monstersCaught, 32, 56+480);
     ctx.fillText("Cords : " + mapCordsX + "," + mapCordsY, 32, 32+480);
-    ctx.font = "14px New Rocker";
-    ctx.fillText("HP: " + hero.hp, 32, 96+480);
-    ctx.fillText("Attack: " + hero.atk, 32, 116+480);
-    ctx.fillText("Weapon Bonus: " + hero.weapon, 112,116+480);
-    ctx.fillText("Defence: " + hero.def, 32,136+480);
-    ctx.fillText("Armor  Bonus: " + hero.armor, 112, 136+480);
+    ctx.fillText("HP: " + hero.hp, 32, 80+480);
+    ctx.fillText("Attack: " + hero.atk, 32, 106+480);
+    ctx.fillText("Weapon Bonus: " + hero.weapon, 140,106+480);
+    ctx.fillText("Defence: " + hero.def, 32,130+480);
+    ctx.fillText("Armor  Bonus: " + hero.armor, 140, 130+480);
     ctx.drawImage(weapon1.img,45,165+480);
     ctx.drawImage(chest1.img,97,165+480);
     ctx.drawImage(heroBImage, 730, 50+480);

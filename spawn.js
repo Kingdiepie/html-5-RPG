@@ -39,39 +39,48 @@ var respawnMonster = function(n) {
     n.y = 64 + (Math.random() * (oldcanvas.height - 128));
     };
 
-var pauseIt = function(n) {
+var pauseIt = function() {
   pause = true;
 };
 
-var playIt = function(n) {
+var playIt = function() {
   pause = false;
   start = true;
 };
 
-var left = function(n) {
+var left = function() {
     leftPress = true;
 };
-var up = function(n) {
+var up = function() {
     upPress = true;
 };
-var right = function(n) {
+var right = function() {
     rightPress = true;
 };
-var down = function(n) {
+var down = function() {
     downPress = true;
 };
-var downOff = function(n) {
+var downOff = function() {
     downPress = false;
 };
-var leftOff = function(n) {
+var leftOff = function() {
     leftPress = false;
 };
-var rightOff = function(n) {
+var rightOff = function() {
     rightPress = false;
 };
-var upOff = function(n) {
+var upOff = function() {
     upPress = false;
 };
+var q = function(){
+    qPress=true;
+};
+var qOff = function(){
+    qpress=false;
+};
+
+
+
 var battle = function(n) {
     var dmg = 0;
     var monDMG = (hero.atk+hero.weapon)-(n.def=n.armor);
