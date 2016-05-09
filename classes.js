@@ -30,7 +30,7 @@ class Weapon{
 class Chest{
 
   constructor(w,img){
-    this.atk=w;
+    this.def=w;
     this.img = new Image();
     this.img.src = img;
   }
@@ -40,7 +40,7 @@ class Chest{
 class Headgear{
 
   constructor(w,img){
-    this.atk=w;
+    this.def=w;
     this.img = new Image();
     this.img.src = img;
   }
@@ -49,28 +49,42 @@ class Headgear{
 
 class Assesory{ 
 
-  constructor(w,img){
+  constructor(w,d,img){
     this.atk=w;
+    this.def=d;
     this.img = new Image();
     this.img.src = img;
   }
 }
 
 
-  class House{
+class House{
 
-  constructor(x,y){
+  constructor(x,y,m){
     this.X=x;
     this.Y=y;
-
+    this.msg = m;
     }
   }
-  
+
   
 class Inn{
 
   constructor(x,y){
     this.X=x;
     this.Y=y;
+    this.msg="Welcome to our in travler, Have a good rest";
+    
   }
 }
+
+
+class Tavern{
+
+  constructor(x,y,q){
+    this.X=x;
+    this.Y=y;
+    this.msg = "Innkeeper: Welcome to my Tavern travler, I have a quest for you.";
+    this.quest=q;
+    }
+  }
