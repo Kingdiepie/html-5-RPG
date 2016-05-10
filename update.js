@@ -13,7 +13,7 @@ var qPress = false;
 var update = function(modifier) {
 houseSouth = false;
   hero.weapon = weapon1.atk;
-  hero.armor = chest1.atk;
+  hero.armor = chest1.def;
 
     walkCount++;
     if (walkCount === 40){
@@ -124,8 +124,6 @@ houseSouth = false;
     else if(pause===true && (81 in keysDown || qPress ===true)){
 
         playIt();
-        render();
-        render2();
 
     }
 
@@ -183,7 +181,9 @@ if (pause === false){
         resetEast();
     }
    changeImg();
-
+  
+   checkHouses();
+   
 
 
     //a lot more to come as I get backgrounds
@@ -207,10 +207,10 @@ if (pause === false){
 
  if(map[mapCordsX][mapCordsY][7] === 1){
  for (i = 0; i<osHouseList.length; i++){
-      if(hero.y > osHouseList[i].Y+90){
+      if(hero.y > osHouseList[i].y+90){
           houseSouth=true;
         }
-      if (hero.x <= (osHouseList[i].X + 111) && osHouseList[i].X <= (hero.x + 32) && hero.y <= (osHouseList[i].Y + 98) && osHouseList[i].Y <= (hero.y-12)) {
+      if (hero.x <= (osHouseList[i].x + 111) && osHouseList[i].x <= (hero.x + 32) && hero.y <= (osHouseList[i].y + 98) && osHouseList[i].y <= (hero.y-12)) {
         hero.x = oldherox;
         hero.y = oldheroy;
 
@@ -218,10 +218,10 @@ if (pause === false){
 
     }
   for (i = 0; i<osInnList.length; i++){
-    if(hero.y > osInnList[i].Y+90){
+    if(hero.y > osInnList[i].y+90){
       houseSouth=true;
       }
-      if (hero.x <= (osInnList[i].X + 160) && osInnList[i].X <= (hero.x + 32) && hero.y <= (osInnList[i].Y + 121) && osInnList[i].Y <= (hero.y-40)) {
+      if (hero.x <= (osInnList[i].x + 160) && osInnList[i].x <= (hero.x + 32) && hero.y <= (osInnList[i].y + 121) && osInnList[i].y <= (hero.y-40)) {
         hero.x = oldherox;
         hero.y = oldheroy;
       }
@@ -246,26 +246,26 @@ var render = function() {
    if (bgReady && monsterReady && heroReady) {
         ctx.drawImage(bgImage1, 0, 0);
         ctx.drawImage(bgImage2, 0, 0+480);
-        ctx.drawImage(bgImage3, 0+988, 0);
+        
       }
 
     if (houseSouth === false){
       ctx.drawImage(heroImage, hero.x, hero.y);
-      if(map[mapCordsX][mapCordsY][7] === 1){
+      
         for (i = 0; i<osHouseList.length; i++){
-          ctx.drawImage(house, osHouseList[i].X, osHouseList[i].Y);
-           ctx.drawImage(inn, osInnList[i].X, osInnList[i].Y);
-        }
+          ctx.drawImage(house, osHouseList[i].x, osHouseList[i].y);
+          // ctx.drawImage(inn, osInnList[i].X, osInnList[i].Y);
+        
       }
     }
      if (houseSouth === true){
 
-      if(map[mapCordsX][mapCordsY][7] === 1){
+      
         for (i = 0; i<osHouseList.length; i++){
-          ctx.drawImage(inn, osInnList[i].X, osInnList[i].Y);
-          ctx.drawImage(house, osHouseList[i].X, osHouseList[i].Y);
+          //ctx.drawImage(inn, osInnList[i].x, osInnList[i].y);
+          ctx.drawImage(house, osHouseList[i].x, osHouseList[i].y);
           ctx.drawImage(heroImage, hero.x, hero.y);
-        }
+        
       }
     }
 
@@ -296,11 +296,6 @@ var render2 = function() {
   // Score
   //Intial Render?
   
-    //ctx.font='72px FontAwesome';
-   // ctx.fillText('\uF102',128+988,80); // up
-    //ctx.fillText('\uf100',80+988,128); // left
-   // ctx.fillText('\uF101',176+988,128); // right
-  //  ctx.fillText('\uf103',128+988,176); //down
 
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
