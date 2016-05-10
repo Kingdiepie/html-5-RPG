@@ -12,11 +12,11 @@ var despawnMonsters = function(n) {
 };
 var createMonsters = function() {
     if(map[mapCordsX][mapCordsY][0] === 1){
-      onscreenMonster.push(monsterData[0]);
+      
       //take monsters from monsterData
     }
     if(map[mapCordsX][mapCordsY][0] === 2){
-      onscreenMonster.push(monsterData[0]);
+      osHouseList.push(House1);
       onscreenMonster.push(monsterData[1]);
       onscreenMonster.push(monsterData[2]);
       onscreenMonster.push(monsterData[3]);
@@ -32,13 +32,38 @@ var createMonsters = function() {
     }
 };
 
+var createHouses = function() {
+    if(map[mapCordsX][mapCordsY][7] === 0){
+      
+      //take monsters from monsterData
+    }
+    if(map[mapCordsX][mapCordsY][7] === 1){
+      osHouseList.push(House1);
+    }
+   
+};
+
+var kill = function(i) { //index of monster
+    var temp = onscreenMonster[i];
+    onscreenMonster[i]=onscreenMonster[onscreenMonster.length-1];
+    onscreenMonster[onscreenMonster.length-1]=temp;
+    onscreenMonster.pop();
+
+};
+
+var monsterSpawns = function(i) {
+    oncreenMonster.push(monsterData[i]);
+};
 
 
+//randomise location of monster. 
 var respawnMonster = function(n) {
     n.x = 64 + (Math.random() * (oldcanvas.width - 128));
     n.y = 64 + (Math.random() * (oldcanvas.height - 128));
     };
 
+
+//Pause and Play
 var pauseIt = function() {
   pause = true;
 };
@@ -46,8 +71,15 @@ var pauseIt = function() {
 var playIt = function() {
   pause = false;
   start = true;
+  heroImage.src = heroImage11.src;
+  render();
+  render2();
+  hero.y+=40;
+  
 };
 
+
+//Buttons Simulate Keyboard
 var left = function() {
     leftPress = true;
 };
@@ -76,11 +108,13 @@ var q = function(){
     qPress=true;
 };
 var qOff = function(){
-    qpress=false;
+    qPress=false;
 };
 
 
+//Calculate battle damage.
 
+//TODO: take item bounuses into account. 
 var battle = function(n) {
     var dmg = 0;
     var monDMG = (hero.atk+hero.weapon)-(n.def=n.armor);
@@ -98,7 +132,7 @@ var battle = function(n) {
 };
 
 
-
+//Assign appropriate image background based on location. 
  var changeImg = function() {
  if (map[mapCordsX][mapCordsY][1] === 0){
         bgImage1.src = backImage15.src;
@@ -146,6 +180,24 @@ var battle = function(n) {
         bgImage1.src = backImage14.src;
       }
 
-
-
 };
+
+var checkHouses = function() {
+    
+    for( i = 0;i<osHouseList.length;i++){
+      console.log("test2");
+        if((hero.y < osHouseList[i].y+102 && hero.y > osHouseList[i].y-30+128) && (hero.x < osHouseList[i].x + 40 && hero.x > osHouseList[i].x + 20)){
+            console.log("test");
+            houseMsg(osHouseList[i].msg);
+        }
+    }
+};
+
+var houseMsg = function(m) {
+    ctx.drawImage(popUp, 128, 90);
+    ctx.textAlign="center"; 
+    ctx.fillText(m,oldcanvas.width/2,190);
+    ctx.fillText("Press Enter or Continue button to exit.",oldcanvas.width/2,256);
+    pauseIt();
+};
+
