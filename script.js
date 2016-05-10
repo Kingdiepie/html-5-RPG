@@ -19,7 +19,7 @@ var touchX=0;
 var touchY=0;
 
 window.addEventListener("keydown", function(e) {
-    // space and arrow keys
+    // stop space and arrow keys from scrolling
     if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
         e.preventDefault();
     }
@@ -86,7 +86,7 @@ bgImage1.onload = function() {
         backImage12.src = "images/background12.png";
         backImage13.src = "images/background13.png";
         backImage14.src = "images/background14.png";
-        backImage15.src = "images/background.png"; 
+        backImage15.src = "images/background.png";
 
 bgImage1.src = "images/background.png"; // Background images
 
@@ -96,14 +96,19 @@ bgImage2.onload = function() {
    bgReady = true;
 };
 
-//Background image
+
 
 var bgImage3 = new Image();
 bgImage3.onload = function() {
-   bgReady = true;
+  bgReady = true;
 };
 
-bgImage3.src = "images/Capture.PNG"; // Background images
+
+bgImage3.src = "images/backgroundBack.png";  // Background images
+
+
+var popUp = new Image();
+popUp.src = "images/popup.png";  // Background images
 
 //images for backgorunds.
 bgImage2.src = "images/backgroundBottom.png"; // Background images
@@ -192,21 +197,19 @@ var hero = {
     armor: 5
 };
 
-
-
-
-House1 = new House (200,123);
-Inn1 = new Inn (320,100);
-osInnList=[];
-osInnList.push(Inn1);
-weapon1= new Weapon (5, "images/knife1.PNG");
-chest1 = new Chest (5, "images/chestplate1.PNG");
+//Object Holders
+var osInnList=[];
 var equipedItems=[];
 var inventory=[];
 var items=[];
 var osHouseList=[];
 var monsterData = [];
 var onscreenMonster = [];
+
+House1 = new House (200,123,"Welcome to our village sir, people are on edge due to monsters in the south.");
+Inn1 = new Inn (320,100);
+weapon1= new Weapon (5, "images/knife1.PNG");
+chest1 = new Chest (5, "images/chestplate1.PNG");
 monster = new Monster(80,100,20,10,0,0,0,0);
 monster1 = new Monster(70,110,20,10,0,0,0,0);
 monster2 = new Monster(66,105,20,10,0,0,0,0);
@@ -227,41 +230,17 @@ monsterData.push(orc2);
 monsterData.push(orc3);
 monsterData.push(orc4);
 monsterData.push(orc5);
-osHouseList.push(House1);
+osInnList.push(Inn1);
+
 var monstersCaught = 0;
-
 var MonsterMove = 0;
-
-var kill = function(i) { //index of monster
-    var temp = onscreenMonster[i];
-    onscreenMonster[i]=onscreenMonster[onscreenMonster.length-1];
-    onscreenMonster[onscreenMonster.length-1]=temp;
-    onscreenMonster.pop();
-
-};
-
-
-
-
-
-var monsterSpawns = function(i) {
-    oncreenMonster.push(monsterData[i]);
-};
 
 ////////////////////////////////Global Objects//////////////////////////////////
 
 /////////////////////////// Handle keyboard controls////////////////////////////
 var keysDown = {};
 
-canvastest.addEventListener("touchstart", touchHandler, false);
 
-function touchHandler(event) {
-  // Get a reference to our coordinates div
-  var touchY = event.touches[0].pageY;
-  var touchX = event.touches[0].pageX;
-  // Write the coordinates of the touch to the div
-  console.log(touchX,touchY);
-}
 
 addEventListener("keydown", function(e) {
     keysDown[e.keyCode] = true;
@@ -286,6 +265,7 @@ var resetNorth = function() {
     mapCordsY -= 1;
     despawnMonsters(onscreenMonster);
     createMonsters();
+    createHouses();
 
 };
 var resetEast = function() {
@@ -293,6 +273,7 @@ var resetEast = function() {
     mapCordsX -= 1;
     despawnMonsters(onscreenMonster);
     createMonsters();
+    createHouses();
 
 };
 var resetWest = function() {
@@ -300,6 +281,7 @@ var resetWest = function() {
     mapCordsX += 1;
     despawnMonsters(onscreenMonster);
     createMonsters();
+    createHouses();
 
 };
 var resetSouth = function() {
@@ -307,6 +289,7 @@ var resetSouth = function() {
     mapCordsY += 1;
     despawnMonsters(onscreenMonster);
     createMonsters();
+    createHouses();
 
 };
 
