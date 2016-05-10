@@ -61,8 +61,8 @@ class Assesory{
 class House{
 
   constructor(x,y,m){
-    this.X=x;
-    this.Y=y;
+    this.x=x;
+    this.y=y;
     this.msg = m;
     }
   }
@@ -71,8 +71,8 @@ class House{
 class Inn{
 
   constructor(x,y){
-    this.X=x;
-    this.Y=y;
+    this.x=x;
+    this.y=y;
     this.msg="Welcome to our in travler, Have a good rest";
     
   }
@@ -88,3 +88,7 @@ class Tavern{
     this.quest=q;
     }
   }
+
+
+
+// class Quest{}
