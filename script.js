@@ -42,7 +42,7 @@ var mapXmax = 2;
 var mapYmin = 2;
 var mapYmax = 2;
 
-
+var shop =  false; 
 
 ///////////////////////////////////Map Fields///////////////////////////////////
 
@@ -174,6 +174,9 @@ mImg[1]=monster2Image;
 var inn = new Image();
 inn.src = "images/inn1.png";
 
+var shop = new Image();
+shop.src = "images/shop.png";
+
 var house = new Image();
 house.src = "images/house1.png";     //Enemy images\
 
@@ -194,7 +197,8 @@ var hero = {
     atk: 10 ,
     weapon: 0,
     def: 10,
-    armor: 5
+    armor: 5,
+    silver: 100
 };
 
 //Object Holders
@@ -205,21 +209,26 @@ var items=[];
 var osHouseList=[];
 var monsterData = [];
 var onscreenMonster = [];
+var osShopList = []; 
+
 
 House1 = new House (200,123,"Welcome to our village sir, people are on edge due to monsters in the south.");
-Inn1 = new Inn (320,100);
-weapon1= new Weapon (5, "images/knife1.PNG");
-chest1 = new Chest (5, "images/chestplate1.PNG");
-monster = new Monster(80,100,20,10,0,0,0,0);
-monster1 = new Monster(70,110,20,10,0,0,0,0);
-monster2 = new Monster(66,105,20,10,0,0,0,0);
-monster3 = new Monster(73,112,20,10,0,0,0,0);
-monster4 = new Monster(90,116,20,10,0,0,0,0);
-orc1 = new Monster(90,106,30,15,0,5,5,1);
-orc2 = new Monster(66,125,30,15,0,5,5,1);
-orc3 = new Monster(78,128,30,15,0,5,5,1);
-orc4 = new Monster(74,120,30,15,0,5,5,1);
-orc5 = new Monster(88,115,30,15,0,5,5,1);
+inn1 = new Inn (320,100);
+weapon1= new Weapon (5, "images/knife1.PNG",0);
+chest1 = new Chest (5, "images/chestplate1.PNG",0);
+headgear1 = new Headgear (3,"images/headgear1.jpg",60);
+assesory1 = new Assesory (4, "images/",80);
+shop1 = new Shop (485,120,weapon1,chest1,headgear1,assesory1);
+monster = new Monster(80,100,20,10,0,0,0,0,3);
+monster1 = new Monster(70,110,20,10,0,0,0,0,3);
+monster2 = new Monster(66,105,20,10,0,0,0,0,3);
+monster3 = new Monster(73,112,20,10,0,0,0,0,3);
+monster4 = new Monster(90,116,20,10,0,0,0,0,3);
+orc1 = new Monster(90,106,30,15,0,5,5,1,5);
+orc2 = new Monster(66,125,30,15,0,5,5,1,5);
+orc3 = new Monster(78,128,30,15,0,5,5,1,5);
+orc4 = new Monster(74,120,30,15,0,5,5,1,5);
+orc5 = new Monster(88,115,30,15,0,5,5,1,5);
 monsterData.push(monster);
 monsterData.push(monster1);
 monsterData.push(monster2);
@@ -230,7 +239,6 @@ monsterData.push(orc2);
 monsterData.push(orc3);
 monsterData.push(orc4);
 monsterData.push(orc5);
-osInnList.push(Inn1);
 
 var monstersCaught = 0;
 var MonsterMove = 0;
@@ -261,36 +269,44 @@ addEventListener("keyup", function(e) {
 
 
 var resetNorth = function() {
+    despawnMonsters(osHouseList);
     hero.y = 394;
     mapCordsY -= 1;
     despawnMonsters(onscreenMonster);
+    despawnMonsters(osInnList);
     createMonsters();
     createHouses();
 
 };
 var resetEast = function() {
+    despawnMonsters(osHouseList);
     hero.x = 0;
     mapCordsX -= 1;
+    despawnMonsters(osInnList);
     despawnMonsters(onscreenMonster);
     createMonsters();
     createHouses();
-
+    
 };
 var resetWest = function() {
+    despawnMonsters(osHouseList);
     hero.x = oldcanvas.width-32;
     mapCordsX += 1;
+    despawnMonsters(osInnList);
     despawnMonsters(onscreenMonster);
     createMonsters();
     createHouses();
-
+    
 };
 var resetSouth = function() {
+    despawnMonsters(onscreenMonster);
     hero.y = 0;
     mapCordsY += 1;
-    despawnMonsters(onscreenMonster);
+    despawnMonsters(osInnList);
+    despawnMonsters(osHouseList);
     createMonsters();
     createHouses();
-
+    
 };
 
 

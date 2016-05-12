@@ -35,15 +35,20 @@ var createMonsters = function() {
 var createHouses = function() {
     if(map[mapCordsX][mapCordsY][7] === 0){
       
-      //take monsters from monsterData
+      
     }
     if(map[mapCordsX][mapCordsY][7] === 1){
       osHouseList.push(House1);
+      osInnList.push(inn1);
+      osShopList.push(shop1);
+      console.log(shop1.x);
     }
    
 };
 
+
 var kill = function(i) { //index of monster
+    hero.silver += onscreenMonster[i].reward;
     var temp = onscreenMonster[i];
     onscreenMonster[i]=onscreenMonster[onscreenMonster.length-1];
     onscreenMonster[onscreenMonster.length-1]=temp;
@@ -74,7 +79,6 @@ var playIt = function() {
   heroImage.src = heroImage11.src;
   render();
   render2();
-  hero.y+=40;
   
 };
 
@@ -113,7 +117,6 @@ var qOff = function(){
 
 
 //Calculate battle damage.
-
 //TODO: take item bounuses into account. 
 var battle = function(n) {
     var dmg = 0;
@@ -125,10 +128,7 @@ var battle = function(n) {
     ctx.drawImage(n.img, 800, 60+480);
     ctx.fillText("Press q to countinue",720,100+480);
     ctx.fillText("You will take " + dmg + " damage", 710, 132+480);
-
-
     return dmg;
-
 };
 
 
@@ -179,25 +179,57 @@ var battle = function(n) {
       if (map[mapCordsX][mapCordsY][1] === 14){
         bgImage1.src = backImage14.src;
       }
-
 };
 
 var checkHouses = function() {
     
     for( i = 0;i<osHouseList.length;i++){
-      console.log("test2");
-        if((hero.y < osHouseList[i].y+102 && hero.y > osHouseList[i].y-30+128) && (hero.x < osHouseList[i].x + 40 && hero.x > osHouseList[i].x + 20)){
-            console.log("test");
-            houseMsg(osHouseList[i].msg);
-        }
+      if( osHouseList.length > 0 &&(hero.y < osHouseList[i].y+102 && hero.y > osHouseList[i].y-30+128) && (hero.x < osHouseList[i].x + 40 && hero.x > osHouseList[i].x + 20)){
+          houseMsg(osHouseList[i].msg);
+          hero.y += 40;
+      }
     }
+};
+
+var checkInns = function() {
+  for(i = 0;i<osHouseList.length;i++){
+    if( osInnList.length > 0 &&(hero.y < osInnList[i].y+125 && hero.y > osInnList[i].y-30+105) && (hero.x < osInnList[i].x + 105 && hero.x > osInnList[i].x + 85)){
+      innMsg(osInnList[i].msg);
+      hero.hp = 100; 
+      hero.y += 40;
+    }
+  }
+};
+
+var checkShops = function() {
+  //TOFIX: Why is the door zone Everywhere?????
+  for(i = 0;i<osHouseList.length;i++){
+    {if( osShopList.length > 0 &&(hero.y < osShopList[i].y+125 && hero.y > osShopList[i].y-30+105) && (hero.x < osShopList[i].x + 30 && hero.x > osShopList[i].x + 10)){}
+      //shopMsg(osShopList[i].msg);
+      console.log("test");
+      //hero.y += 40;
+    }
+  }
 };
 
 var houseMsg = function(m) {
     ctx.drawImage(popUp, 128, 90);
     ctx.textAlign="center"; 
     ctx.fillText(m,oldcanvas.width/2,190);
-    ctx.fillText("Press Enter or Continue button to exit.",oldcanvas.width/2,256);
+
+//http://stackoverflow.com/questions/4478742/html5-canvas-can-i-somehow-use-linefeeds-in-filltext
+
+    ctx.fillText("Press Enter or the Continue button to exit.",oldcanvas.width/2,256);
     pauseIt();
 };
+
+var innMsg = function(m) {
+    ctx.drawImage(popUp, 128, 90);
+    ctx.textAlign="center"; 
+    ctx.fillText(m,oldcanvas.width/2,190);
+    ctx.fillText("Press Enter or the Continue button to exit.",oldcanvas.width/2,256);
+    pauseIt();
+};
+
+
 

@@ -45,10 +45,8 @@ houseSouth = false;
         }
         else if (walkCount < 40){
             heroImage.src = heroImage3.src;
-
         }
-
-        }
+      }
     }
     else if ((40 in keysDown || downPress === true) && (!(hero.x < 170  || hero.x > oldcanvas.width-212) ||
     hero.y < oldcanvas.height-100))  { // Player holding down
@@ -181,9 +179,9 @@ if (pause === false){
         resetEast();
     }
    changeImg();
-  
    checkHouses();
-   
+   checkInns();
+   checkShops();
 
 
     //a lot more to come as I get backgrounds
@@ -200,12 +198,9 @@ if (pause === false){
         //call battle
 
     }
-  
-
-
 }
 
- if(map[mapCordsX][mapCordsY][7] === 1){
+if(map[mapCordsX][mapCordsY][7] === 1){
  for (i = 0; i<osHouseList.length; i++){
       if(hero.y > osHouseList[i].y+90){
           houseSouth=true;
@@ -217,20 +212,25 @@ if (pause === false){
       }
 
     }
+
   for (i = 0; i<osInnList.length; i++){
-    if(hero.y > osInnList[i].y+90){
+      if (hero.x <= (osInnList[i].x + 160) && osInnList[i].x <= (hero.x + 32) && hero.y <= (osInnList[i].y + 121) && osInnList[i].y <= (hero.y-40)) {
+        hero.x = oldherox;
+        hero.y = oldheroy;
+      }
+      for (i = 0; i<osInnList.length; i++){
+      if(hero.y > osShopList[i].y+90){
       houseSouth=true;
       }
-      if (hero.x <= (osInnList[i].x + 160) && osInnList[i].x <= (hero.x + 32) && hero.y <= (osInnList[i].y + 121) && osInnList[i].y <= (hero.y-40)) {
+      if (hero.x <= (osShopList[i].x + 93) && osInnList[i].x <= (hero.x + 32) && hero.y <= (osInnList[i].y + 121) && osInnList[i].y <= (hero.y-40)) {
         hero.x = oldherox;
         hero.y = oldheroy;
       }
 
     }
+  }
 }
-
 }
-
 };
 
 //////////////////////////////////Update Method/////////////////////////////////
@@ -246,30 +246,38 @@ var render = function() {
    if (bgReady && monsterReady && heroReady) {
         ctx.drawImage(bgImage1, 0, 0);
         ctx.drawImage(bgImage2, 0, 0+480);
-        
       }
-
     if (houseSouth === false){
       ctx.drawImage(heroImage, hero.x, hero.y);
-      
+      if(map[mapCordsX][mapCordsY][7] !== 0){
         for (i = 0; i<osHouseList.length; i++){
           ctx.drawImage(house, osHouseList[i].x, osHouseList[i].y);
-          // ctx.drawImage(inn, osInnList[i].X, osInnList[i].Y);
-        
+        }
+        for(i = 0; i<osInnList.length; i++){
+          ctx.drawImage(inn, osInnList[i].x, osInnList[i].y);
+        }
+        for(i = 0; i<osShopList.length; i++){
+          ctx.drawImage(shop, osShopList[i].x, osShopList[i].y);
+        }
       }
     }
      if (houseSouth === true){
-
-      
+      if(map[mapCordsX][mapCordsY][7] !== 0){
         for (i = 0; i<osHouseList.length; i++){
-          //ctx.drawImage(inn, osInnList[i].x, osInnList[i].y);
           ctx.drawImage(house, osHouseList[i].x, osHouseList[i].y);
+        }
+        for(i = 0; i<osShopList.length; i++){
+          ctx.drawImage(shop, osShopList[i].x, osShopList[i].y);
+          
+        }
+        for(i = 0; i<osInnList.length; i++){
+          ctx.drawImage(inn, osInnList[i].x, osInnList[i].y);
+          
+        }
+        }
           ctx.drawImage(heroImage, hero.x, hero.y);
-        
+        }
       }
-    }
-
-
 
         for (i = 0; i<onscreenMonster.length; i++){
         ctx.drawImage(onscreenMonster[i].img, onscreenMonster[i].x, onscreenMonster[i].y);
@@ -279,24 +287,15 @@ var render = function() {
             ctx.fillStyle = 'red';
             ctx.fillText("Game Over",220,256);
             pause=true;
-
         }
+      }
+   };
+   
 
-        }
-
-
-
-   }
-
-
-
-};
 
 var render2 = function() {
   // Score
   //Intial Render?
-  
-
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillStyle = "rgb(250, 250, 250)";
@@ -306,6 +305,7 @@ var render2 = function() {
     ctx.fillText("Enemies Slayed : " + monstersCaught, 32, 56+480);
     ctx.fillText("Cords : " + mapCordsX + "," + mapCordsY, 32, 32+480);
     ctx.fillText("HP: " + hero.hp, 32, 80+480);
+    ctx.fillText("Silver: " + hero.silver, 140, 80+480);
     ctx.fillText("Attack: " + hero.atk, 32, 106+480);
     ctx.fillText("Weapon Bonus: " + hero.weapon, 140,106+480);
     ctx.fillText("Defence: " + hero.def, 32,130+480);
