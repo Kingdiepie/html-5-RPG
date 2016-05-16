@@ -2,8 +2,6 @@
   position: relative;
   zindex: 2;
 }
-
-
 	 #bg {
   position: fixed;
   top: 0%;
@@ -66,12 +64,11 @@
 #q
 {
   width: 128px;
-  height: 64px;
+  height: 128px;
   left: 990px;
   position: absolute;
-  top: 320px;
+  top: 400px;
   zindex: 2;
-
 }
 #ls{
   left: 1022px;
@@ -104,7 +101,6 @@
   color: white;
   font-size: 128px;
   pointer-events: none;
-  
 }
 #container
 {
@@ -151,4 +147,41 @@
 	background:linear-gradient(to bottom, #634b30 5%, #7d5d3b 100%);
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#634b30', endColorstr='#7d5d3b',GradientType=0);
 	background-color:#634b30;
+}
+#one
+{
+
+  left: 1128px;
+  position: absolute;
+  top: 400px;
+  zindex: 2;
+  height: 64px;
+  width: 64px;
+}
+#two
+{
+  left: 1202px;
+  position: absolute;
+  top: 400px;
+  zindex: 2;
+  height: 64px;
+  width: 64px;
+}
+#three
+{
+  left: 1128px;
+  position: absolute;
+  top: 474px;
+  zindex: 2;
+  height: 64px;
+  width: 64px;
+}
+#four
+{
+  left: 1202px;
+  position: absolute;
+  top: 474px;
+  zindex: 2;
+  height: 64px;
+  width: 64px;
 }

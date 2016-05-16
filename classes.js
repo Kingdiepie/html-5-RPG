@@ -13,6 +13,7 @@ class Monster{
     this.MC = 0;
     this.img= mImg[i];
     this.reward=r; 
+    this.exp=r*5;
   }
 }
 
@@ -85,11 +86,23 @@ class Inn{
 
 class Tavern{
 
-  constructor(x,y,q){
+  constructor(x,y,q,bossName){
     this.x=x;
     this.y=y;
-      this.msg = "[Owner]: Welcome to my Tavern travler, I have a quest for you.";
+    this.msg = "[Owner]: Welcome to my Tavern travler, I have a quest for you.";
     this.quest=q;
+    this.bossKilled=false; 
+    this.bn = bossName;
+    }
+  }
+  
+  class Quest{
+ 
+    constructor(t,r,l,n){
+      this.monster=t;
+      this.reward=r;
+      this.lvl=l;
+      this.name=n;
     }
   }
 

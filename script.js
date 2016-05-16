@@ -2,19 +2,14 @@
 
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-
 var oldcanvas = {
   width: 988,
   height: 480
 };
-console.log(oldcanvas.height);
-
 canvas.width = 988+250;
 canvas.height = 480+250;
-
 var start = false;
 var pause = false;
-
 var touchX=0;
 var touchY=0;
 
@@ -26,26 +21,19 @@ window.addEventListener("keydown", function(e) {
 }, false);
 
 ///////////////////////////////////Canvases///////////////////////////////////
-
 ////////////////////////////////////Map Fields//////////////////////////////////
 
 //tell the program what map to change to when the player leaves it's current area.
-var mapCordsX = 1;
-var mapCordsY = 1;
-
-//to save the area code when the player is in a building
-var oldMapCordsX = 0;
-var oldMapCordsY = 0;
-
+var mapCordsX = 0;
+var mapCordsY = 4;
 var mapXmin = 0;
-var mapXmax = 2;
-var mapYmin = 2;
-var mapYmax = 2;
-
-var shop =  false; 
+var mapXmax = 4;
+var mapYmin = 0;
+var mapYmax = 4;
+var shopO =  false; 
+var TavernO = false;
 
 ///////////////////////////////////Map Fields///////////////////////////////////
-
 //////////////////////////////////Images////////////////////////////////////////
 
 //Background image
@@ -54,7 +42,6 @@ var bgImage1 = new Image();
 bgImage1.onload = function() {
    bgReady = true;
 };
-
 
 //images for backgorunds.
         backImage1 = new Image();
@@ -96,16 +83,12 @@ bgImage2.onload = function() {
    bgReady = true;
 };
 
-
-
 var bgImage3 = new Image();
 bgImage3.onload = function() {
   bgReady = true;
 };
 
-
 bgImage3.src = "images/backgroundBack.png";  // Background images
-
 
 var popUp = new Image();
 popUp.src = "images/popup.png";  // Background images
@@ -134,19 +117,18 @@ heroImage.onload = function() {
         heroImage1.src = "images/sprite01north.PNG";
         heroImage2.src = "images/sprite01FT1north.PNG";
         heroImage3.src = "images/sprite01FT2north.PNG";
-	      heroImage4.src = "images/sprite01west.PNG";
-	      heroImage5.src = "images/sprite01westFT1.PN.PNG";
-	      heroImage6.src = "images/sprite01westFT2.PN.PNG";
+	    heroImage4.src = "images/sprite01west.PNG";
+	    heroImage5.src = "images/sprite01westFT1.PN.PNG";
+	    heroImage6.src = "images/sprite01westFT2.PN.PNG";
   	    heroImage7.src = "images/sprite01east.PNG";
        	heroImage8.src = "images/sprite01eastFT1.PN.PNG";
         heroImage9.src = "images/sprite01eastFT2.PN.PNG";
- 	      heroImage10.src = "images/sprite01southFT1.PN.PNG";
+ 	    heroImage10.src = "images/sprite01southFT1.PN.PNG";
       	heroImage11.src = "images/sprite01south.PNG";
-    	  heroImage12.src = "images/sprite01southFT2.PN.PNG";
+    	heroImage12.src = "images/sprite01southFT2.PN.PNG";
 
 
 //Hero Images
-
 // Hero image
 
 var heroBImage = new Image();
@@ -160,33 +142,34 @@ var monsterImage = new Image();
 monsterImage.onload = function() {
     monsterReady = true;
 };
-
 monsterImage.src = "images/monster.png";     //Enemy images\
-
 var monster2Image = new Image();
 monster2Image.src = "images/orc.png";     //Enemy images\
-
+var monster3Image = new Image();
+monster3Image.src = "images/ghost.png"; 
+var monster4Image = new Image();
+monster4Image.src = "images/boss1.jpg"; 
+var monster5Image = new Image();
+monster5Image.src = "images/boss2.jpg"; 
 
 mImg = [];
 mImg[0]=monsterImage;
 mImg[1]=monster2Image;
+mImg[2]=monster3Image;
+mImg[3]=monster4Image;
+mImg[4]=monster5Image;
 
 var inn = new Image();
 inn.src = "images/inn1.png";
-
 var shop = new Image();
 shop.src = "images/shop.png";
-
+var tavern = new Image();
+tavern.src = "images/tavern.png";
 var house = new Image();
 house.src = "images/house1.png";     //Enemy images\
 
 //////////////////////////////////Images////////////////////////////////////////
-
-
-
 ////////////////////////////////Global Objects//////////////////////////////////
-
-
 
 // Game objects
 var hero = {
@@ -197,8 +180,14 @@ var hero = {
     atk: 10 ,
     weapon: 0,
     def: 10,
-    armor: 5,
-    silver: 100
+    armor: 0,
+    silver: 100,
+    hweapon: null,
+    hchest: null,
+    hheadgear: null,
+    hassesory: null,
+    lvl: 1,
+    exp: 0
 };
 
 //Object Holders
@@ -210,25 +199,47 @@ var osHouseList=[];
 var monsterData = [];
 var onscreenMonster = [];
 var osShopList = []; 
+var osTavernList = [];
+var bossesKilled = []; 
 
 
-House1 = new House (200,123,"Welcome to our village sir, people are on edge due to monsters in the south.");
+House1 = new House (200,123,"Welcome to our village sir, people are on edge from monsters to the east.");
+House2 = new House (200,123,"You should get out of town, Ghosts roam these parts.");
 inn1 = new Inn (320,100);
-weapon1= new Weapon (5, "images/knife1.PNG",0);
-chest1 = new Chest (5, "images/chestplate1.PNG",0);
-headgear1 = new Headgear (3,"images/headgear1.jpg",60);
-assesory1 = new Assesory (4, "images/",80);
-shop1 = new Shop (485,120,weapon1,chest1,headgear1,assesory1);
-monster = new Monster(80,100,20,10,0,0,0,0,3);
-monster1 = new Monster(70,110,20,10,0,0,0,0,3);
-monster2 = new Monster(66,105,20,10,0,0,0,0,3);
-monster3 = new Monster(73,112,20,10,0,0,0,0,3);
-monster4 = new Monster(90,116,20,10,0,0,0,0,3);
-orc1 = new Monster(90,106,30,15,0,5,5,1,5);
-orc2 = new Monster(66,125,30,15,0,5,5,1,5);
-orc3 = new Monster(78,128,30,15,0,5,5,1,5);
-orc4 = new Monster(74,120,30,15,0,5,5,1,5);
-orc5 = new Monster(88,115,30,15,0,5,5,1,5);
+weapon1= new Weapon (4, "images/knife1.PNG",40);
+chest1 = new Chest (5, "images/chestplate1.PNG",20);
+weapon2= new Weapon (6, "images/axe1.png",60);
+weapon3= new Weapon (10, "images/sword1.png",140);
+chest2 = new Chest (15, "images/chestplate2.PNG",320);
+headgear1 = new Headgear (4,"images/headgear1.png",60);
+assesory1 = new Assesory (0,3,"images/assesory1.png",80);
+assesory2 = new Assesory (0,7,"images/assesory2.png",120);
+hero.hweapon = weapon1;
+hero.hchest = chest1;
+hero.hheadgear = new Headgear (0,"",0);
+hero.hassesory = new Assesory (0,0,"",0);
+shop1 = new Shop (485,120,weapon2,chest2,headgear1,assesory1);
+shop2 = new Shop (485,120,weapon3,chest2,headgear1,assesory2);
+monster = new Monster(80,100,20,10,9,5,0,0,3);
+monster1 = new Monster(70,110,20,10,9,5,0,0,3);
+monster2 = new Monster(66,105,20,10,9,5,0,0,3);
+monster3 = new Monster(73,112,20,10,9,5,0,0,3);
+monster4 = new Monster(90,116,20,10,9,5,0,0,3);
+orc1 = new Monster(90,106,30,15,10,5,5,1,5);
+orc2 = new Monster(66,125,30,15,10,5,5,1,5);
+orc3 = new Monster(78,128,30,15,10,5,5,1,5);
+orc4 = new Monster(74,120,30,15,10,5,5,1,5);
+orc5 = new Monster(88,115,30,15,10,5,5,1,5);
+ghost1 = new Monster(90,110,35,35,5,0,10,2,8);
+ghost2 = new Monster(86,115,35,35,5,0,10,2,8);
+ghost3 = new Monster(98,120,35,35,5,0,10,2,8);
+ghost4 = new Monster(114,112,35,35,5,0,10,2,8);
+ghost5 = new Monster(103,90,35,35,5,0,10,2,8);
+//bosses may need to be nerfed.
+ogreBoss1 = new Monster(20,20,130,40,30,25,35,3,150);
+demonBoss1 = new Monster(20,20,80,65,0,30,30,4,100);
+demonMissionaryQuest = new Quest(demonBoss1,300,3,"Demon's Missionary");
+tavern1 = new Tavern(575,135,demonMissionaryQuest,"Encurus The Demon Missionary");
 monsterData.push(monster);
 monsterData.push(monster1);
 monsterData.push(monster2);
@@ -239,6 +250,13 @@ monsterData.push(orc2);
 monsterData.push(orc3);
 monsterData.push(orc4);
 monsterData.push(orc5);
+monsterData.push(ghost1);
+monsterData.push(ghost2);
+monsterData.push(ghost3);
+monsterData.push(ghost4);
+monsterData.push(ghost5);
+monsterData.push(ogreBoss1);
+monsterData.push(demonBoss1);
 
 var monstersCaught = 0;
 var MonsterMove = 0;
@@ -248,87 +266,78 @@ var MonsterMove = 0;
 /////////////////////////// Handle keyboard controls////////////////////////////
 var keysDown = {};
 
-
-
 addEventListener("keydown", function(e) {
     keysDown[e.keyCode] = true;
 }, false);
-
 addEventListener("keyup", function(e) {
     delete keysDown[e.keyCode];
 }, false);
-
 /////////////////////////// Handle keyboard controls////////////////////////////
-
-
-
-///////////////////////////////Map Methods//////////////////////////////////////
-
-
-
-
+///////////////////////////////Map Methods and Data//////////////////////////////////////
 
 var resetNorth = function() {
-    despawnMonsters(osHouseList);
     hero.y = 394;
     mapCordsY -= 1;
-    despawnMonsters(onscreenMonster);
-    despawnMonsters(osInnList);
-    createMonsters();
-    createHouses();
-
+    reset(); 
 };
 var resetEast = function() {
-    despawnMonsters(osHouseList);
     hero.x = 0;
     mapCordsX -= 1;
-    despawnMonsters(osInnList);
-    despawnMonsters(onscreenMonster);
-    createMonsters();
-    createHouses();
-    
+    reset();    
 };
 var resetWest = function() {
-    despawnMonsters(osHouseList);
     hero.x = oldcanvas.width-32;
     mapCordsX += 1;
-    despawnMonsters(osInnList);
-    despawnMonsters(onscreenMonster);
-    createMonsters();
-    createHouses();
-    
+    reset();
 };
 var resetSouth = function() {
-    despawnMonsters(onscreenMonster);
     hero.y = 0;
     mapCordsY += 1;
-    despawnMonsters(osInnList);
+    reset();    
+};
+  var reset = function() {
     despawnMonsters(osHouseList);
+    despawnMonsters(onscreenMonster);
+    despawnMonsters(osInnList);
+    despawnMonsters(osShopList);
     createMonsters();
     createHouses();
-    
-};
-
-
-// spawnMonster the game when the player catches a monster
+    console.log(map[mapCordsX][mapCordsY][7]);
+  };
 
 //map array
-var map = new Array(3);
+var map = new Array(5); //width
 for (var i = 0; i < 10; i++) {
-  map[i] = new Array(3);
+  map[i] = new Array(5);//height
 }
-
-//[monsters,bushes,rocks,water,inn,shop,tavern,house]
+//[monsters,bushes,rocks,water,NA,NA,NA,town]
 //tells update method what to spawn based on your map location
-var mapData00 = [2,12,0,0,0,0,0,0];
-var mapData01 = [2,3,0,0,0,0,0,0];
-var mapData02 = [2,13,0,0,0,0,0,0];
-var mapData11 = [1,0,0,0,0,0,0,0];
-var mapData12 = [1,4,0,0,0,0,0,0];
-var mapData10 = [1,2,0,0,0,0,0,0];
-var mapData20 = [1,11,0,0,0,0,0,1];
-var mapData21 = [3,1,0,0,0,0,0,0];
-var mapData22 = [1,14,0,0,0,0,0,0];
+//TODO: combine 314-338 with 339-363
+var mapData00 = [3,12,0,0,0,0,0,0];
+var mapData01 = [1,3,0,0,0,0,0,1];
+var mapData02 = [2,5,0,0,0,0,0,0];
+var mapData11 = [3,4,0,0,0,0,0,0];
+var mapData12 = [3,12,0,0,0,0,0,0];
+var mapData10 = [2,2,0,0,0,0,0,0];
+var mapData20 = [0,2,0,0,0,0,0,0];
+var mapData21 = [4,0,0,0,0,0,0,0];
+var mapData22 = [3,0,0,0,0,0,0,0];
+var mapData30 = [4,2,0,0,0,0,0,0];
+var mapData03 = [2,5,0,0,0,0,0,0];
+var mapData31 = [1,0,0,0,0,0,0,2];
+var mapData13 = [4,13,0,0,0,0,0,0];
+var mapData32 = [4,1,0,0,0,0,0,0];
+var mapData23 = [13,4,0,0,0,0,0,0];
+var mapData33 = [3,1,0,0,0,0,0,0];
+var mapData40 = [3,11,0,0,0,0,0,0];
+var mapData04 = [2,7,0,0,0,0,0,0];
+var mapData41 = [2,1,0,0,0,0,0,0];
+var mapData14 = [102,8,0,0,0,0,0,0];
+var mapData42 = [4,5,0,0,0,0,0,0];
+var mapData24 = [5,9,0,0,0,0,0,0];
+var mapData43 = [5,5,0,0,0,0,0,0];
+var mapData34 = [4,14,0,0,0,0,0,0];
+var mapData44= [101,7,0,0,0,0,0,0];
 map[0][0] = mapData00;
 map[0][1] = mapData01;
 map[0][2] = mapData02;
@@ -338,10 +347,25 @@ map[1][0] = mapData10;
 map[2][1] = mapData21;
 map[2][2] = mapData22;
 map[2][0] = mapData20;
+map[3][0] = mapData30;
+map[0][3] = mapData03; 
+map[3][1] = mapData31; 
+map[1][3] = mapData13; 
+map[3][2] = mapData32; 
+map[2][3] = mapData23; 
+map[3][3] = mapData33;
+map[4][0] = mapData40; 
+map[0][4] = mapData04; 
+map[4][1] = mapData41; 
+map[1][4] = mapData14;
+map[4][2] = mapData42; 
+map[2][4] = mapData24; 
+map[4][3] = mapData43; 
+map[3][4] = mapData34; 
+map[4][4] = mapData44;
 
-///////////////////////////////Map Methods//////////////////////////////////////
 
-
+///////////////////////////////Map Methods and Data//////////////////////////////////////
 
 //////////////////////////////////The main game loop////////////////////////////
 
@@ -349,11 +373,7 @@ window.onload = function () {
 var main = function() {
     var now = Date.now();
     var delta = now - then;
-
-
     update(delta / 2000);
-
-
    if(pause===false){
     render();
 
@@ -381,8 +401,4 @@ main();
 //////////////////////////////////The main game loop////////////////////////////
 
 //session storage= http://www.w3schools.com/html/html5_webstorage.asp
-//make sprite take full steps not half steps
-// Work on Items and make house and inn DUE: 3/28/16
-
-
 };
