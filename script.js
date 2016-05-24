@@ -6,8 +6,8 @@ var oldcanvas = {
   width: 988,
   height: 480
 };
-canvas.width = 988+250;
-canvas.height = 480+250;
+canvas.width = 988;
+canvas.height = 480;
 var start = false;
 var pause = false;
 var touchX=0;
@@ -32,7 +32,8 @@ var mapYmin = 0;
 var mapYmax = 4;
 var shopO =  false; 
 var TavernO = false;
-
+var oldXcord=mapCordsX;
+var oldYcord=mapCordsY;
 ///////////////////////////////////Map Fields///////////////////////////////////
 //////////////////////////////////Images////////////////////////////////////////
 
@@ -190,6 +191,24 @@ var hero = {
     exp: 0
 };
 
+var heroSaved = {
+    speed: 256,// movement in pixels per second
+    x: oldcanvas.width/2,
+    y: oldcanvas.height/2,
+    hp: 100,
+    atk: 10 ,
+    weapon: 0,
+    def: 10,
+    armor: 0,
+    silver: 100,
+    hweapon: null,
+    hchest: null,
+    hheadgear: null,
+    hassesory: null,
+    lvl: 1,
+    exp: 0
+};
+
 //Object Holders
 var osInnList=[];
 var equipedItems=[];
@@ -236,10 +255,12 @@ ghost3 = new Monster(98,120,35,35,5,0,10,2,8);
 ghost4 = new Monster(114,112,35,35,5,0,10,2,8);
 ghost5 = new Monster(103,90,35,35,5,0,10,2,8);
 //bosses may need to be nerfed.
-ogreBoss1 = new Monster(20,20,130,40,30,25,35,3,150);
-demonBoss1 = new Monster(20,20,80,65,0,30,30,4,100);
+ogreBoss1 = new Monster(20,20,100,30,25,20,30,3,150);
+demonBoss1 = new Monster(20,20,70,45,0,20,20,4,100);
 demonMissionaryQuest = new Quest(demonBoss1,300,3,"Demon's Missionary");
+orcCommanderQuest = new Quest(ogreBoss1,500,5,"Orc Commander");
 tavern1 = new Tavern(575,135,demonMissionaryQuest,"Encurus The Demon Missionary");
+tavern2 = new Tavern(575,135,orcCommanderQuest,"Byclops The Orc Commander");
 monsterData.push(monster);
 monsterData.push(monster1);
 monsterData.push(monster2);
@@ -260,6 +281,12 @@ monsterData.push(demonBoss1);
 
 var monstersCaught = 0;
 var MonsterMove = 0;
+
+swapStats(heroSaved,hero);
+      oldXcord=mapCordsX;
+      oldYcord=mapCordsY;
+      innY = hero.y;
+      innX = hero.x;
 
 ////////////////////////////////Global Objects//////////////////////////////////
 
@@ -286,7 +313,7 @@ var resetEast = function() {
     reset();    
 };
 var resetWest = function() {
-    hero.x = oldcanvas.width-32;
+    hero.x = oldcanvas.width-100;
     mapCordsX += 1;
     reset();
 };
@@ -296,11 +323,13 @@ var resetSouth = function() {
     reset();    
 };
   var reset = function() {
-    despawnMonsters(osHouseList);
-    despawnMonsters(onscreenMonster);
-    despawnMonsters(osInnList);
-    despawnMonsters(osShopList);
+    despawn(osHouseList);
+    despawn(onscreenMonster);
+    despawn(osInnList);
+    despawn(osShopList);
+    despawn(osTavernList);
     createMonsters();
+    spawnMonster(onscreenMonster);
     createHouses();
     console.log(map[mapCordsX][mapCordsY][7]);
   };
@@ -330,7 +359,7 @@ var mapData32 = [4,1,0,0,0,0,0,0];
 var mapData23 = [13,4,0,0,0,0,0,0];
 var mapData33 = [3,1,0,0,0,0,0,0];
 var mapData40 = [3,11,0,0,0,0,0,0];
-var mapData04 = [2,7,0,0,0,0,0,0];
+var mapData04 = [1,7,0,0,0,0,0,0];// startpoint
 var mapData41 = [2,1,0,0,0,0,0,0];
 var mapData14 = [102,8,0,0,0,0,0,0];
 var mapData42 = [4,5,0,0,0,0,0,0];
@@ -378,7 +407,9 @@ var main = function() {
     render();
 
   if(start === true){
-    render2();
+      if(statsScreen === true){
+          render2();
+      }
     then = now;
 }
 }

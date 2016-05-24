@@ -61,15 +61,6 @@
   zindex: 2;
 
 }
-#q
-{
-  width: 128px;
-  height: 128px;
-  left: 990px;
-  position: absolute;
-  top: 400px;
-  zindex: 2;
-}
 #ls{
   left: 1022px;
   position: absolute;
@@ -148,40 +139,58 @@
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#634b30', endColorstr='#7d5d3b',GradientType=0);
 	background-color:#634b30;
 }
+#q
+{
+  width: 128px;
+  height: 128px;
+  left: 100px;
+  position: absolute;
+  top: 490px;
+  zindex: 2;
+}
 #one
 {
 
-  left: 1128px;
+  left: 230px;
   position: absolute;
-  top: 400px;
+  top: 490px;
   zindex: 2;
-  height: 64px;
-  width: 64px;
+  height: 128px;
+  width: 128px;
 }
 #two
 {
-  left: 1202px;
+  left: 360px;
   position: absolute;
-  top: 400px;
+  top: 490px;
   zindex: 2;
-  height: 64px;
-  width: 64px;
+  height: 128px;
+  width: 128px;
 }
 #three
 {
-  left: 1128px;
+  left: 490px;
   position: absolute;
-  top: 474px;
+  top: 490px;
   zindex: 2;
-  height: 64px;
-  width: 64px;
+  height: 128px;
+  width: 128px;
 }
 #four
 {
-  left: 1202px;
+  left: 620px;
   position: absolute;
-  top: 474px;
+  top: 490px;
   zindex: 2;
-  height: 64px;
-  width: 64px;
+  height: 128px;
+  width: 128px;
+}
+#StatScreen
+{
+  left: 750px;
+  position: absolute;
+  top: 490px;
+  zindex: 2;
+  height: 128px;
+  width: 128px;
 }

@@ -1,4 +1,5 @@
 //////////////////////////////////Update Method/////////////////////////////////
+var statsScreen = false;
 var battleTest = false;
 var walkCount = 0;
 var leftPress = false;
@@ -15,12 +16,14 @@ var lvlBase = 500;
 var lvlMod = 1.00;
 var lvlModB = 0.25;
 var expNeeded = 0.0;
+var innX;
+var innY;
+var itmBought = false;
 var update = function(modifier) {
 houseSouth = false;
 hero.weapon = hero.hweapon.atk + hero.hassesory.atk;
 hero.armor = hero.hchest.def + hero.hheadgear.def + hero.hassesory.def;
 expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
-
 
     walkCount++;
     if (walkCount === 40){
@@ -28,8 +31,6 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
         }
     oldherox = hero.x;
     oldheroy = hero.y;
-
-
 
     //key events
     if (pause === false){
@@ -132,8 +133,9 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
           hero.silver += hero.hweapon.price /2;
           hero.hweapon = osShopList[0].item[0];
           hero.silver -= osShopList[0].item[0].price;
+          itmBought = true;
         } 
-        else if(osShopList[0].item[0].price > hero.silver){
+        else if(osShopList[0].item[0].price > hero.silver && itmBought === false){
          notEnoughSilver();
         }
     }
@@ -142,8 +144,9 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
           hero.silver += hero.hchest.price /2;
           hero.hchest = osShopList[0].item[1];
           hero.silver -= osShopList[0].item[1].price;
+          itmBought = true;
         } 
-        else if(osShopList[0].item[1].price > hero.silver){
+        else if(osShopList[0].item[1].price > hero.silver && itmBought === false){
          notEnoughSilver();
            
         }
@@ -153,8 +156,9 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
           hero.silver += hero.hheadgear.price /2;
           hero.hheadgear = osShopList[0].item[2];
           hero.silver -= osShopList[0].item[2].price;
+          itmBought = true;
         } 
-        else if(osShopList[0].item[2].price > hero.silver){
+        else if(osShopList[0].item[2].price > hero.silver && itmBought === false){
          notEnoughSilver();
         }
     }
@@ -163,22 +167,26 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
           hero.silver += hero.hassesory.price /2;
           hero.hassesory = osShopList[0].item[3];
           hero.silver -= osShopList[0].item[3].price;
+          itmBought = true;
         } 
-        else if(osShopList[0].item[3].price > hero.silver){
+        else if(osShopList[0].item[3].price > hero.silver && itmBought === false){
          
          notEnoughSilver();
         }
     }
 
+    if(52 in keysDown || 51 in keysDown || 50 in keysDown || 49 in keysDown){
+     //do nothing
+    }
+    else {
+       itmBought = false; 
+    }
     
     
 onePress = false;
 twoPress = false;
 threePress = false;
 fourPress = false;
-    
-    
-    
     
 
 if (pause === false){
@@ -212,9 +220,7 @@ if (pause === false){
     }
     if (onscreenMonster[i].y > oldcanvas.height-64 ){
       onscreenMonster[i].MC=m*3+1;
-
     }
-
   }
 
 
@@ -228,7 +234,7 @@ if (pause === false){
     }
     if (hero.x <= 0) {
         resetWest();
-    } else if (hero.x >= 965) {
+    } else if (hero.x >= 940) {
         resetEast();
     }
    changeImg();
@@ -239,23 +245,6 @@ if (pause === false){
 
     //a lot more to come as I get backgrounds
     // Are they touching?
-  battleTest = false;
-  for (i = 0; i<onscreenMonster.length; i++){
-    if (hero.x <= (onscreenMonster[i].x + 32) && onscreenMonster[i].x <= (hero.x + 32) && hero.y <= (onscreenMonster[i].y + 32) && onscreenMonster[i].y <= (hero.y + 32)) {
-       battleTest=true;
-       hero.hp-=  battle(onscreenMonster[i]);
-       experience(onscreenMonster[i]);
-        if(map[mapCordsX][mapCordsY][0] > 100){
-           bossesKilled.push(onscreenMonster[i]);
-        }
-        kill(i);
-        ++monstersCaught;
-        pauseIt();
-
-        //call battle
-
-    }
-}
 
 if(map[mapCordsX][mapCordsY][7] !== 0){
  for (i = 0; i<osHouseList.length; i++){
@@ -284,7 +273,7 @@ if(map[mapCordsX][mapCordsY][7] !== 0){
         hero.y = oldheroy;
       }
       if (hero.x <= (osTavernList[i].x + 160) && osTavernList[i].x <= (hero.x + 32) && hero.y <= (osTavernList[i].y + 100) && osTavernList[i].y <= (hero.y-40)) {
-        hero.x = oldherox
+        hero.x = oldherox;
         hero.y = oldheroy;
       }
 
@@ -306,7 +295,7 @@ var render = function() {
    if (start === true){
    if (bgReady && monsterReady && heroReady) {
         ctx.drawImage(bgImage1, 0, 0);
-        ctx.drawImage(bgImage2, 0, 0+480);
+        
       }
     if (houseSouth === false){
       ctx.drawImage(heroImage, hero.x, hero.y);
@@ -351,13 +340,52 @@ var render = function() {
         for (i = 0; i<onscreenMonster.length; i++){
         ctx.drawImage(onscreenMonster[i].img, onscreenMonster[i].x, onscreenMonster[i].y);
 
-        if (hero.hp <= 0){
-            ctx.font = "bold 128px New Rocker";
-            ctx.fillStyle = 'red';
-            ctx.fillText("Game Over",220,256);
-            pause=true;
-        }
+      
       }
+    
+      battleTest = false;
+  for (i = 0; i<onscreenMonster.length; i++){
+    if (hero.x <= (onscreenMonster[i].x + 32) && onscreenMonster[i].x <= (hero.x + 32) && hero.y <= (onscreenMonster[i].y + 32) && onscreenMonster[i].y <= (hero.y + 32)) {
+       battleTest=true;
+       hero.hp-=  battle(onscreenMonster[i]);
+       experience(onscreenMonster[i]);
+        if(map[mapCordsX][mapCordsY][0] > 100){
+           bossesKilled.push(onscreenMonster[i]);
+        }
+        kill(i);
+        ++monstersCaught;
+        pauseIt();
+
+
+    }
+      if (hero.hp <= 0){ //Death Message
+            pauseIt();
+            heroSaved.silver = hero.silver;
+            ctx.drawImage(popUp, 128, 90);
+            ctx.textAlign="center"; 
+            ctx.font = "bold 80px New Rocker";
+            ctx.fillStyle = "red";
+            ctx.fillText("Game Over",oldcanvas.width/2,140);
+            ctx.font = "bold 40px New Rocker";
+            ctx.fillStyle = "white";
+            ctx.fillText("Press Q or Continue to respawn",oldcanvas.width/2,290);
+            swapStats(hero,heroSaved);
+            mapCordsX = oldXcord;
+            mapCordsY = oldYcord;
+            hero.y = innY;
+            hero.x = innX;
+            hero.silver /= 2;
+            if(mapCordsY < 0 ){
+              reset();
+            }
+            else{
+            reset();
+            }
+            
+        }
+}
+
+    
    };
    
 
@@ -365,26 +393,27 @@ var render = function() {
 var render2 = function() {
   // Score
   //Intial Render?
+    ctx.drawImage(bgImage2, 0, 0+480-250);
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillStyle = "rgb(250, 250, 250)";
     ctx.font = "20px New Rocker";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("Level : " + hero.lvl, 32, 56+480);
-    ctx.fillText("Experience: " + float2int(hero.exp/expNeeded *100) +"%", 140, 56+480);
-    ctx.fillText("Cords : " + mapCordsX + "," + mapCordsY, 32, 32+480);
-    ctx.fillText("HP: " + hero.hp, 32, 80+480);
-    ctx.fillText("Silver: " + hero.silver, 140, 80+480);
-    ctx.fillText("Attack: " + hero.atk, 32, 106+480);
-    ctx.fillText("Weapon Bonus: " + hero.weapon, 140,106+480);
-    ctx.fillText("Defence: " + hero.def, 32,130+480);
-    ctx.fillText("Armor  Bonus: " + hero.armor, 140, 130+480);
-    ctx.drawImage(hero.hweapon.img,45,165+480);
-    ctx.drawImage(hero.hchest.img,97,165+480);
-    ctx.drawImage(hero.hheadgear.img,149,165+480);
-    ctx.drawImage(hero.hassesory.img,201,165+480);
-    ctx.drawImage(heroBImage, 730, 50+480);
+    ctx.fillText("Level : " + hero.lvl, 32, 56+480-250);
+    ctx.fillText("Experience: " + float2int(hero.exp/expNeeded *100) +"%", 140, 56+480-250);
+    ctx.fillText("Cords : " + mapCordsX + "," + mapCordsY, 32, 32+480-250);
+    ctx.fillText("HP: " + hero.hp, 32, 80+480-250);
+    ctx.fillText("Silver: " + hero.silver, 140, 80+480-250);
+    ctx.fillText("Attack: " + hero.atk, 32, 106+480-250);
+    ctx.fillText("Weapon Bonus: " + hero.weapon, 140,106+480-250);
+    ctx.fillText("Defence: " + hero.def, 32,130+480-250);
+    ctx.fillText("Armor  Bonus: " + hero.armor, 140, 130+480-250);
+    ctx.drawImage(hero.hweapon.img,45,165+480-250);
+    ctx.drawImage(hero.hchest.img,97,165+480-250);
+    ctx.drawImage(hero.hheadgear.img,149,165+480-250);
+    ctx.drawImage(hero.hassesory.img,201,165+480-250);
+    
   
 
 };

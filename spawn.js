@@ -1,3 +1,26 @@
+var swapStats = function(st,sf){
+    st.speed = sf.speed;
+    st.x= sf.x;
+    st.y=sf.y;
+    st.hp=sf.hp;
+    st.atk=sf.atk;
+    st.weapon=sf.weapon;
+    st.def=sf.def;
+    st.armor=sf.armor;
+    st.silver=sf.silver;
+    st.hweapon=sf.hweapon;
+    st.hchest=sf.hchest;
+    st.hheadgear=sf.hheadgear;
+    st.hassesory=sf.hassesory;
+    st.hweapon.img=sf.hweapon.img;
+    st.hchest.img=sf.hchest.img;
+    st.hheadgear.img=sf.hheadgear.img;
+    st.hassesory.img=sf.hassesory.img;
+    st.lvl=sf.lvl;
+    st.exp=sf.exp;
+
+};
+
 var spawnMonster = function(n) {
     for( i = 0;i<n.length;i++){
     // Throw the monster somewhere on the screen randomly
@@ -5,7 +28,7 @@ var spawnMonster = function(n) {
     n[i].y = 64 + (Math.random() * (oldcanvas.height - 128));
     }
 };
-var despawnMonsters = function(n) {
+var despawn = function(n) {
     for( i = 0;i<n.length*10;i++){
       n.pop();
     }
@@ -158,6 +181,8 @@ var fourOff = function(){
 //Calculate battle damage.
 //TODO: take item bounuses into account. 
 var battle = function(n) {
+    ctx.drawImage(popUp, 128, 90);
+    ctx.textAlign="center"; 
     var dmg = 0;
     var monDMG = (hero.atk+hero.weapon)-(n.def+n.armor);
     if(monDMG<0)
@@ -166,12 +191,15 @@ var battle = function(n) {
     var heroDMG = (n.attack+n.weapon)-(hero.def+hero.armor);
     dmg += times * heroDMG;
     dmg = Math.round(dmg);
-    ctx.drawImage(n.img, 800, 60+480);
-    ctx.fillText("Press q to countinue",720,100+480);
+    ctx.drawImage(n.img, canvas.width/2+48, 110);
+    ctx.drawImage(heroBImage, canvas.width/2-48, 110);
+    ctx.font = "32px New Rocker";
+    ctx.fillStyle = "rgb(255, 255, 255)";
+    ctx.fillText("Press q to countinue",canvas.width/2,180);
     if(dmg<5){
     dmg=5;
     }
-    ctx.fillText("You will take " + dmg + " damage", 710, 132+480);
+    ctx.fillText("You will take " + dmg + " damage", canvas.width/2, 260);
     return dmg;
 };
 
@@ -240,7 +268,13 @@ var checkInns = function() {
     if( osInnList.length > 0 &&(hero.y < osInnList[i].y+125 && hero.y > osInnList[i].y-30+105) && (hero.x < osInnList[i].x + 105 && hero.x > osInnList[i].x + 85)){
       innMsg(osInnList[i].msg);
       hero.hp = 100; 
+      hero.silver -= 10*hero.lvl; 
+      swapStats(heroSaved,hero);
       hero.y += 40;
+      oldXcord=mapCordsX;
+      oldYcord=mapCordsY;
+      innY = hero.y;
+      innX = hero.x;
     }
   }
 };
@@ -340,12 +374,12 @@ var notEnoughSilver = function(){
 var experience = function(n){
   hero.exp += n.exp;
     if(map[mapCordsX][mapCordsY][0] > 100){//double EXP for bosses. 
-        hero.exp += n.exp
+        hero.exp += n.exp;
     }
   if(hero.exp > expNeeded){
     hero.exp = hero.exp - expNeeded;
-    hero.atk+=float2int(hero.atk / 10)+1;
-    hero.def+=float2int(hero.def / 10)+1;
+    hero.atk+=float2int(hero.atk / 10);
+    hero.def+=float2int(hero.def / 10);
     hero.lvl++; 
     
   }
@@ -353,4 +387,11 @@ var experience = function(n){
 
 function float2int (value) {
     return value | 0;
+}
+
+var Menu = function() {
+    if (statsScreen === true)
+        statsScreen = false;
+    else 
+        statsScreen = true; 
 }
