@@ -18,13 +18,36 @@ var lvlModB = 0.25;
 var expNeeded = 0.0;
 var innX;
 var innY;
-var itmBought = false;
+var itmBought = 0;
+var NES = false;
+var AB = false; 
+var ISB = false; 
+var MoveUp = false;
+var MoveDown = false;
+var MoveLeft = false;
+var MoveRight = false;
+var SpriteChanged = false;
+var maps = false;
+var buffer1 = 0; 
+var buffer2 = 0;
+var buffer3 = 0;
+var credits = false; 
 var update = function(modifier) {
 houseSouth = false;
 hero.weapon = hero.hweapon.atk + hero.hassesory.atk;
 hero.armor = hero.hchest.def + hero.hheadgear.def + hero.hassesory.def;
 expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
-
+SpriteChanged = false;
+MoveUp = false;
+MoveDown = false;
+MoveLeft = false;
+MoveRight = false;
+    
+    hero.x = Math.round(hero.x);
+    hero.y = Math.round(hero.y);
+    hero.silver = Math.round(hero.silver);
+    
+    
     walkCount++;
     if (walkCount === 40){
             walkCount = 0;
@@ -32,14 +55,39 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
     oldherox = hero.x;
     oldheroy = hero.y;
 
+    if(Math.abs(Ty - hero.y) > 10 ){
+        if (hero.y > Ty){
+          MoveUp = true;
+        }
+       if (hero.y < Ty){
+          MoveDown = true;
+        }
+    }
+    
+    if(Math.abs(Tx - hero.x) > 10 ){ 
+       if ( hero.x < Tx){
+          MoveRight = true;
+        }
+       if ( hero.x > Tx){
+          MoveLeft = true; 
+        }
+    }
+    
+ 
+    
+
+    
+
+    
     //key events
     if (pause === false){
     var bushHold = map[mapCordsX][mapCordsY][1];
-    if ((38 in keysDown || upPress === true) && (!(hero.x < 170  || hero.x > oldcanvas.width-212) ||
-    hero.y > 15)) { // Player holding up
+    if ((38 in keysDown || upPress === true || MoveUp === true) && (!(hero.x < 170  || hero.x > oldcanvas.width-212) ||
+    hero.y > 49)) { // Player holding up
 
-      if(hero.y>32 || (bushHold != 10 && bushHold != 11&& bushHold != 12&& bushHold != 2&& bushHold != 6&& bushHold != 8 && bushHold != 9)){
+      if(hero.y>49 || (bushHold != 10 && bushHold != 11&& bushHold != 12&& bushHold != 2&& bushHold != 6&& bushHold != 8 && bushHold != 9)){
         hero.y -= hero.speed * modifier;
+          if (MoveUp !== true) {Ty = hero.y;}
         if (walkCount < 10){
             heroImage.src = heroImage1.src;
         }
@@ -52,14 +100,15 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
         else if (walkCount < 40){
             heroImage.src = heroImage3.src;
         }
+        SpriteChanged = true;
       }
     }
-    else if ((40 in keysDown || downPress === true) && (!(hero.x < 170  || hero.x > oldcanvas.width-212) ||
+    else if ((40 in keysDown || downPress === true || MoveDown === true) && (!(hero.x < 170  || hero.x > oldcanvas.width-212) ||
     hero.y < oldcanvas.height-100))  { // Player holding down
-
-
-      if(hero.y<oldcanvas.height-96 || (bushHold != 10 && bushHold != 13&& bushHold != 14&& bushHold != 4&& bushHold != 7&& bushHold != 8 && bushHold != 9)){
+      if(hero.y<oldcanvas.height-101 || (bushHold != 10 && bushHold != 13&& bushHold != 14&& bushHold != 4&& bushHold != 7&& bushHold != 8 && bushHold != 9)){
         hero.y += hero.speed * modifier;
+        if (MoveDown !== true) {Ty = hero.y;}
+          if (SpriteChanged === false){
         if (walkCount < 10){
             heroImage.src = heroImage10.src;
         }
@@ -72,13 +121,17 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
         else if (walkCount < 40){
             heroImage.src = heroImage12.src;
         }
+          }
+          SpriteChanged = true;
       }
     }
-    else if ((37 in keysDown || leftPress === true) && (!(hero.y < 140  || hero.y > 240) ||
-    hero.x >25))  { // Player holding left
+    if ((37 in keysDown || leftPress === true || MoveLeft === true) && (!(hero.y < 140  || hero.y > 240) ||
+    hero.x >50))  { // Player holding left
 
-      if(hero.x>32 || (bushHold != 1 && bushHold != 10&& bushHold != 11&& bushHold != 14&& bushHold != 7&& bushHold != 5 && bushHold != 6)){
+      if(hero.x>54 || (bushHold != 1 && bushHold != 10&& bushHold != 11&& bushHold != 14&& bushHold != 7&& bushHold != 5 && bushHold != 6)){
         hero.x -= hero.speed * modifier;
+          if (MoveLeft !== true) {Tx = hero.x;}
+          if (SpriteChanged === false){
         if (walkCount < 10){
             heroImage.src = heroImage4.src;
         }
@@ -91,13 +144,17 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
         else if (walkCount < 40){
             heroImage.src = heroImage6.src;
         }
+          }
+          SpriteChanged = true;
       }
     }
-    else if ((39 in keysDown ||rightPress === true) && (!(hero.y < 140  || hero.y > 240) ||
+     else if ((39 in keysDown ||rightPress === true || MoveRight === true) && (!(hero.y < 140  || hero.y > 240) ||
     hero.x <oldcanvas.width - 75)) { // Player holding right
         //12,13,3,5,6,7,8
         if(hero.x<oldcanvas.width-64 || (bushHold != 12 && bushHold != 13&& bushHold != 3&& bushHold != 5&& bushHold != 6&& bushHold != 7 && bushHold != 8)){
         hero.x += hero.speed * modifier;
+            if (MoveRight !== true) {Tx = hero.x;}
+            if (SpriteChanged === false){
         if (walkCount < 10){
             heroImage.src = heroImage7.src;
         }
@@ -109,11 +166,12 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
         }
         else if (walkCount < 40){
             heroImage.src = heroImage9.src;
-        }
+        } }
+            SpriteChanged = true;
       }
     }
     else if (start === false && 32 in keysDown && (!(hero.y < 140  || hero.y > 240) ||
-    hero.x <oldcanvas.width - 75)) { // Player holding right
+    hero.x <oldcanvas.width - 75)) { 
        start=true;
        hero.x= oldcanvas.width/2;
        hero.y= oldcanvas.height/2;
@@ -124,64 +182,64 @@ expNeeded = (lvlMod+(lvlModB*hero.lvl))*lvlBase;
 
     }
     else if(pause===true && (81 in keysDown || qPress ===true)){
-
         playIt();
-
     }
+    
     else if(shopO === true && (49 in keysDown || onePress === true)){
+        oneOff();
         if (osShopList[0].item[0] !== hero.hweapon && osShopList[0].item[0].price <= hero.silver){
           hero.silver += hero.hweapon.price /2;
           hero.hweapon = osShopList[0].item[0];
           hero.silver -= osShopList[0].item[0].price;
-          itmBought = true;
+          itmBought = 1;
+            if(NES===false && AB === false) 
+          itemGotBought();
+            ISB = true;
         } 
-        else if(osShopList[0].item[0].price > hero.silver && itmBought === false){
-         notEnoughSilver();
-        }
+        
     }
     else if(shopO === true && (50 in keysDown || twoPress === true)){
+        twoOff();
         if (osShopList[0].item[1] !== hero.hchest && osShopList[0].item[1].price <= hero.silver){
           hero.silver += hero.hchest.price /2;
           hero.hchest = osShopList[0].item[1];
           hero.silver -= osShopList[0].item[1].price;
-          itmBought = true;
+          itmBought = 2;
+            if(NES===false  && AB === false) 
+            itemGotBought();
+            ISB = true;
         } 
-        else if(osShopList[0].item[1].price > hero.silver && itmBought === false){
-         notEnoughSilver();
-           
-        }
+        
     }
     else if(shopO === true && (51 in keysDown || threePress === true)){
+        threeOff();
         if (osShopList[0].item[2] !== hero.hheadgear && osShopList[0].item[2].price <= hero.silver){
           hero.silver += hero.hheadgear.price /2;
           hero.hheadgear = osShopList[0].item[2];
           hero.silver -= osShopList[0].item[2].price;
-          itmBought = true;
+          itmBought = 3;
+           if(NES===false  && AB === false) 
+           itemGotBought();
+            ISB = true;
         } 
-        else if(osShopList[0].item[2].price > hero.silver && itmBought === false){
-         notEnoughSilver();
-        }
+        
     }
     else if(shopO === true && (52 in keysDown || fourPress === true)){
+        fourOff();
         if (osShopList[0].item[3] !== hero.hassesory && osShopList[0].item[3].price <= hero.silver){
           hero.silver += hero.hassesory.price /2;
           hero.hassesory = osShopList[0].item[3];
           hero.silver -= osShopList[0].item[3].price;
-          itmBought = true;
+          itmBought = 4;
+            if(NES===false && AB === false ) 
+          itemGotBought();
+            ISB = true;
         } 
-        else if(osShopList[0].item[3].price > hero.silver && itmBought === false){
-         
-         notEnoughSilver();
-        }
-    }
-
-    if(52 in keysDown || 51 in keysDown || 50 in keysDown || 49 in keysDown){
-     //do nothing
-    }
-    else {
-       itmBought = false; 
+       
     }
     
+
+  
     
 onePress = false;
 twoPress = false;
@@ -227,16 +285,19 @@ if (pause === false){
     //Map change event triggers
 
 
-    if (hero.y >= 395) {
+    if (hero.y >= 384) {
         resetSouth();
-    } else if (hero.y <= 0) {
+    } else if (hero.y <= 47) {
         resetNorth();
     }
-    if (hero.x <= 0) {
+    if (hero.x <= 47) {
         resetWest();
-    } else if (hero.x >= 940) {
+    } else if (hero.x >= 930) {
         resetEast();
     }
+    
+    
+  console.log("credits"+CreditsB.x1);
    changeImg();
    checkHouses();
    checkInns();
@@ -352,6 +413,8 @@ var render = function() {
         if(map[mapCordsX][mapCordsY][0] > 100){
            bossesKilled.push(onscreenMonster[i]);
         }
+        Ty = hero.y;
+        Tx = hero.x;
         kill(i);
         ++monstersCaught;
         pauseIt();
@@ -381,42 +444,141 @@ var render = function() {
             else{
             reset();
             }
-            
         }
-}
-
-    
+      }
    };
    
 
-
 var render2 = function() {
-  // Score
-  //Intial Render?
-    ctx.drawImage(bgImage2, 0, 0+480-250);
+    if(statsScreen === true){
+      mapScrollY += 10;
+      if(mapScrollY > 500){mapScrollY = 500;}
+    }
+    else {
+      mapScrollY -= 10;
+      if(mapScrollY < 250){mapScrollY = 250;}
+    }
+    ctx.drawImage(bgImage2, 0, 0+480-mapScrollY+250);
+    var my_gradient=ctx.createLinearGradient(0,980,0,0);
+    my_gradient.addColorStop(0,"#634b30");
+    // my_gradient.addColorStop(0.25,"#336600");
+    my_gradient.addColorStop(0.5,"#7d5d3b");
+    //my_gradient.addColorStop(0.75,"#666633");
+    my_gradient.addColorStop(1,"#634b30");
+    ctx.fillStyle=my_gradient;
+    ctx.fillRect(InventoryB.x1-3,InventoryB.y1-mapScrollY+250+64+64+128,128,128);
+    ctx.fillRect(StatsB.x1-3,StatsB.y1-mapScrollY+250+64+64+128,128,128);
+    ctx.fillRect(MapB.x1-3,MapB.y1-mapScrollY+250+64+64+128,128,128);
+    ctx.fillRect(CreditsB.x1-3,CreditsB.y1-mapScrollY+250+64+64+128,128,128);
+    ctx.fillStyle="white";
+    ctx.font = "24px New Rocker";
+    ctx.fillText("Inventory",InventoryB.x1+8+buffer3,InventoryB.y1+128 + 128-mapScrollY+250+64-buffer1);
+    ctx.fillText("Stats",StatsB.x1+30+buffer3/2,StatsB.y1+128 + 128-mapScrollY+250+64-buffer1);
+    ctx.fillText("Map",MapB.x1+40+buffer3/2,MapB.y1 + 128 +128-mapScrollY+250+64-buffer1);
+    ctx.fillText("Credits",CreditsB.x1+20+buffer3/2,CreditsB.y1 +128 + 128-mapScrollY+250+64-buffer1);
+    
+};
+
+var renderBar = function(){
+font = "20px New Rocker";
+    var my_gradient=ctx.createLinearGradient(0,980,0,0);
+    my_gradient.addColorStop(0,"#7a7a52");
+    // my_gradient.addColorStop(0.25,"#336600");
+    my_gradient.addColorStop(0.5,"#8a8a5c");
+    //my_gradient.addColorStop(0.75,"#666633");
+    my_gradient.addColorStop(1,"#7a7a52");
+    ctx.fillStyle=my_gradient;
+    ctx.fillRect(0,480,988,610);
+    ctx.fillStyle="black";
+    ctx.fillText("HP: " + hero.hp, 16+buffer3,484+20-buffer1);
+    ctx.fillText("Level: " + hero.lvl,128+16+buffer3,484+20-buffer1);
+    ctx.fillText("Silver: " + hero.silver, 256+16+buffer3,484+20-buffer1);
+    my_gradient=ctx.createLinearGradient(0,980,0,0+20-buffer1);
+    my_gradient.addColorStop(0,"#634b30");
+    // my_gradient.addColorStop(0.25,"#336600");
+    my_gradient.addColorStop(0.5,"#7d5d3b");
+    //my_gradient.addColorStop(0.75,"#666633");
+    my_gradient.addColorStop(1,"#634b30");
+    ctx.fillStyle=my_gradient;
+    ctx.fillRect(MenuB.x1-3,MenuB.y1,256,128+50-buffer1);
+    ctx.fillRect(NextB.x1-3,NextB.y1,256,128+50-buffer1);
+    ctx.fillStyle="white";
+    ctx.font = "64px New Rocker";
+    ctx.fillText("Menu",MenuB.x1+48+buffer2,MenuB.y1 + 32+50-buffer1*3);
+    ctx.fillText("Next",NextB.x1+48+buffer2,NextB.y1 + 32+50-buffer1*3);
+};
+
+
+
+var renderStats = function(){
+  ctx.drawImage(bgImage2, 0, 0+230);
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillStyle = "rgb(250, 250, 250)";
     ctx.font = "20px New Rocker";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("Level : " + hero.lvl, 32, 56+480-250);
-    ctx.fillText("Experience: " + float2int(hero.exp/expNeeded *100) +"%", 140, 56+480-250);
-    ctx.fillText("Cords : " + mapCordsX + "," + mapCordsY, 32, 32+480-250);
-    ctx.fillText("HP: " + hero.hp, 32, 80+480-250);
-    ctx.fillText("Silver: " + hero.silver, 140, 80+480-250);
-    ctx.fillText("Attack: " + hero.atk, 32, 106+480-250);
-    ctx.fillText("Weapon Bonus: " + hero.weapon, 140,106+480-250);
-    ctx.fillText("Defence: " + hero.def, 32,130+480-250);
-    ctx.fillText("Armor  Bonus: " + hero.armor, 140, 130+480-250);
-    ctx.drawImage(hero.hweapon.img,45,165+480-250);
-    ctx.drawImage(hero.hchest.img,97,165+480-250);
-    ctx.drawImage(hero.hheadgear.img,149,165+480-250);
-    ctx.drawImage(hero.hassesory.img,201,165+480-250);
-    
-  
-
+    ctx.fillText("Level : " + hero.lvl, 32, 56+250);
+    ctx.fillText("Experience: " + float2int(hero.exp/expNeeded *100) +"%", 140, 56+250);
+    ctx.fillText("Cords : " + mapCordsX + "," + mapCordsY, 32, 32+250);
+    ctx.fillText("HP: " + hero.hp, 32, 80+250);
+    ctx.fillText("Silver: " + hero.silver, 140, 80+250);
+    ctx.fillText("Attack: " + hero.atk, 32, 106+250);
+    ctx.fillText("Weapon Bonus: " + hero.weapon, 140,106+250);
+    ctx.fillText("Defence: " + hero.def, 32,130+250);
+    ctx.fillText("Armor  Bonus: " + hero.armor, 140, 130+250);
+    ctx.drawImage(hero.hweapon.img,45,165+250);
+    ctx.drawImage(hero.hchest.img,97,165+250);
+    if(hero.hheadgear.def !== 0)
+    ctx.drawImage(hero.hheadgear.img,149,165+250);
+    if(hero.hassesory.def !== 0)
+    ctx.drawImage(hero.hassesory.img,201,165+250);
 };
 
+var renderMap = function(){
+  var n = 0;
+  ctx.beginPath();
+  ctx.lineWidth="2";
+  ctx.drawImage(bgImage2, 0, 0+230);
+  for(var i = mapXmax+1; i > 0;i-- ){
+    for(var j = mapYmax+1; j > 0;j--){
+      ctx.strokeStyle="white";
+      if(map[i-1][j-1][7] > 0){
+        ctx.fillStyle = "rgb(0, 0, 160)";
+        ctx.fillRect(309+((i+1)*50),260+j*30,50,30);
+        ctx.fillStyle = "rgb(250, 250, 250)";
+      }
+      if (n === mapCordsX && j === mapCordsY+1){
+        ctx.fillStyle = "rgb(160,0,0)";
+        ctx.fillRect(309+i*50,260+j*30,50,30);
+        ctx.fillStyle = "rgb(250, 250, 250)";
+        ctx.strokeStyle="yellow";
+      }
+      else {
+        ctx.fillStyle = "rgb(0, 102, 0)";
+        ctx.fillRect(309+i*50,260+j*30,50,30);
+        ctx.fillStyle = "rgb(250, 250, 250)";
+      }
+      ctx.rect(309+i*50,260+j*30,50,30);
+      ctx.stroke();
+    }
+    n++;
+  if(n>4){n=0;}
+  }
+};
 
-/////////////////////////Update game objects graphics///////////////////////////
+var renderCredits = function(){
+   ctx.drawImage(bgImage2, 0, 0+230);
+   ctx.font = "32px New Rocker";
+   ctx.textAlign="center"; 
+   ctx.fillText("Created By: Dominik Yakoubek",canvas.width/2,280);
+   ctx.fillText("Version 0.4.3",canvas.width/2,320);
+   if(credits === false){
+     credits = true;
+     buffer3 += 55;
+     buffer2+= 75;
+   }
+   
+};
+
+/////////////////////////Update game objects graphics/////////////////////////// 

@@ -91,7 +91,7 @@ var createHouses = function() {
       osHouseList.push(House2);
       osInnList.push(inn1);
       osShopList.push(shop2);
-      
+      osTavernList.push(tavern2);
     }
    
 };
@@ -129,6 +129,19 @@ var playIt = function() {
   heroImage.src = heroImage11.src;
   render();
   render2();
+  OneB.os = false;
+  TwoB.os = false;
+  ThreeB.os = false;
+  FourB.os = false;
+  if (stats===true){
+    buffer1 = 20;
+    
+  }
+  if (maps === true){
+    buffer2 = 75;
+    buffer3 = 55;
+  }
+  stats = false;
   
 };
 
@@ -159,28 +172,77 @@ var upOff = function() {
     upPress = false;
 };
 var q = function(){
-    qPress=true;
+    if (pause === true){
+    playIt();
+    itmBought = 0;
+    }
 };
-var qOff = function(){
-    qPress=false;
-};
+
 var oneOff = function(){
     onePress=true;
+    if(osShopList.length > 0 && osShopList[0].item[0].price > hero.silver && itmBought !== 1){ 
+         notEnoughSilver();
+         NES=true; 
+        }
+    if(osShopList[0].item[0] === hero.hweapon && ISB === false){
+            alreadyBought();
+        AB=true; 
+        }
+        
 };
+
+
 var twoOff = function(){
     twoPress=true;
+
+    if(osShopList.length > 0 && osShopList[0].item[1].price > hero.silver && itmBought !== 2){
+         NES=true; 
+         notEnoughSilver();
+      
+        }
+      if(osShopList[0].item[2] === hero.harmor && ISB === false){
+            alreadyBought();
+            AB=true; 
+        }
 };
+
+
 var threeOff = function(){
     threePress=true;
+    if(osShopList.length > 0 && osShopList[0].item[2].price > hero.silver && itmBought !== 3){
+         NES=true; 
+         notEnoughSilver();
+        }
+      if(osShopList[0].item[2] === hero.hheadgear&& ISB === false){
+            alreadyBought();
+          AB=true; 
+        }
 };
+
+
 var fourOff = function(){
     fourPress=true;
+    if(osShopList.length > 0 && osShopList[0].item[3].price > hero.silver && itmBought !== 4){
+         NES=true; 
+         notEnoughSilver();
+        }
+      if(osShopList[0].item[3] === hero.hassesory&& ISB === false){
+            alreadyBought();
+          AB=true; 
+        }
 };
 
 
 //Calculate battle damage.
 //TODO: take item bounuses into account. 
 var battle = function(n) {
+    maps=true;
+    //playIt();
+    ctx.font = "24px New Rocker";
+    buffer3=55;
+    buffer2=75;
+    renderBar();
+    ctx.font = "24px New Rocker";
     ctx.drawImage(popUp, 128, 90);
     ctx.textAlign="center"; 
     var dmg = 0;
@@ -200,6 +262,7 @@ var battle = function(n) {
     dmg=5;
     }
     ctx.fillText("You will take " + dmg + " damage", canvas.width/2, 260);
+   
     return dmg;
 };
 
@@ -256,9 +319,10 @@ var battle = function(n) {
 var checkHouses = function() {
     
     for( i = 0;i<osHouseList.length;i++){
-      if( osHouseList.length > 0 &&(hero.y < osHouseList[i].y+102 && hero.y > osHouseList[i].y-30+128) && (hero.x < osHouseList[i].x + 40 && hero.x > osHouseList[i].x + 20)){
+      if( osHouseList.length > 0 &&(hero.y < osHouseList[i].y+102 && hero.y > osHouseList[i].y-30+128) && (hero.x < osHouseList[i].x + 80 && hero.x > osHouseList[i].x)){
           houseMsg(osHouseList[i].msg);
           hero.y += 40;
+          Ty = hero.y;
       }
     }
 };
@@ -271,6 +335,7 @@ var checkInns = function() {
       hero.silver -= 10*hero.lvl; 
       swapStats(heroSaved,hero);
       hero.y += 40;
+      Ty = hero.y;
       oldXcord=mapCordsX;
       oldYcord=mapCordsY;
       innY = hero.y;
@@ -282,8 +347,10 @@ var checkInns = function() {
 var checkShops = function() {
   for(i = 0;i<osHouseList.length;i++){
     {if( osShopList.length > 0 &&(hero.y < osShopList[i].y+115 && hero.y > osShopList[i].y-30+105) && (hero.x < osShopList[i].x + 30 && hero.x > osShopList[i].x + 10)){
+      itmBought = 0;
       shopMsg(osShopList[i].msg,osShopList[i].item);
       hero.y += 40;
+      Ty = hero.y;
     }
     }
   }
@@ -300,12 +367,14 @@ var checkTaverns = function() {
       }
       TavernMsg(osTavernList[i].msg,osTavernList[i].bn,osTavernList[i].quest.name);
       hero.y += 40;
+      Ty = hero.y;
     }
     }
   }
 };
 
 var TavernMsg = function(m,b,q) {
+  ctx.font = "24px New Rocker";
     ctx.drawImage(popUp, 128, 90);
     ctx.textAlign="center"; 
     ctx.fillText(m,oldcanvas.width/2,190);
@@ -318,6 +387,7 @@ var TavernMsg = function(m,b,q) {
 };
 
 var houseMsg = function(m) {
+    ctx.font = "24px New Rocker";
     ctx.drawImage(popUp, 128, 90);
     ctx.textAlign="center"; 
     ctx.fillText(m,oldcanvas.width/2,190);
@@ -329,6 +399,7 @@ var houseMsg = function(m) {
 };
 
 var innMsg = function(m) {
+  ctx.font = "24px New Rocker";
     ctx.drawImage(popUp, 128, 90);
     ctx.textAlign="center"; 
     ctx.fillText(m,oldcanvas.width/2,190);
@@ -337,6 +408,7 @@ var innMsg = function(m) {
 };
 
 var shopMsg = function(m,itm) {
+  ctx.font = "24px New Rocker";
     ctx.drawImage(popUp, 128, 90);
     ctx.textAlign="center"; 
     ctx.fillStyle = "rgb(250, 250, 250)";
@@ -362,13 +434,31 @@ var shopMsg = function(m,itm) {
     ctx.fillText(itm[3].def,oldcanvas.width/2+126,190);
     ctx.fillStyle = "rgb(250, 250, 250)";
     ctx.fillText("Press Enter or the Continue button to exit.",oldcanvas.width/2,256);
+    OneB.os = true;
+    TwoB.os = true;
+    ThreeB.os = true;
+    FourB.os = true;
     pauseIt();
     shopO = true;
 };
 
 var notEnoughSilver = function(){
+  ctx.font = "16px New Rocker";
+  shopMsg(osShopList[0].msg,osShopList[0].item);
   ctx.fillStyle = "rgb(250, 250, 250)";
   ctx.fillText("Not Enough Silver",oldcanvas.width/2,320);
+};
+var alreadyBought = function(){
+  ctx.font = "16px New Rocker";
+  shopMsg(osShopList[0].msg,osShopList[0].item);
+  ctx.fillStyle = "rgb(250, 250, 250)";
+  ctx.fillText("You already own this!",oldcanvas.width/2,320);
+};
+var itemGotBought = function(){
+  ctx.font = "16px New Rocker";
+  shopMsg(osShopList[0].msg,osShopList[0].item);
+  ctx.fillStyle = "rgb(250, 250, 250)";
+  ctx.fillText("Item Succesfully Bought",oldcanvas.width/2,320);
 };
 
 var experience = function(n){
@@ -381,7 +471,6 @@ var experience = function(n){
     hero.atk+=float2int(hero.atk / 10);
     hero.def+=float2int(hero.def / 10);
     hero.lvl++; 
-    
   }
 };
 
@@ -391,7 +480,37 @@ function float2int (value) {
 
 var Menu = function() {
     if (statsScreen === true)
+      {
         statsScreen = false;
+        MapB.os=false;
+        InventoryB.os=false;
+        StatsB.os=false;
+        CreditsB.os=false;
+      }
     else 
+    {
         statsScreen = true; 
-}
+        MapB.os=true;
+        InventoryB.os=true;
+        StatsB.os=true;
+        CreditsB.os=true;
+    }
+};
+
+var mapmenu = function() {
+      renderMap();
+      pauseIt();
+};
+var statsmenu = function() {
+        renderStats();
+        stats = true;
+        pauseIt();
+    
+};
+var creditsmenu = function() {
+  renderCredits();
+  pauseIt();
+};
+var inventorymenu = function() {
+  console.log("inventory");
+};

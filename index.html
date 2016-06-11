@@ -4,7 +4,6 @@
 
 <link rel="stylesheet" type="text/css" href="mystyle.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-
 <link href='https://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=New+Rocker' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
@@ -22,21 +21,15 @@
 <div id="canvastest">
 
 
-	  <canvas id="canvas"></canvas><br></div>
+	  <canvas id="canvas" style="border:2px solid #000000;"></canvas><br></div>
 <input id="left" class="myButton2" type="button" value="" onmousedown="left();" onmouseup="leftOff();" onmouseout="leftOff();" ontouchstart="left();" ontouchend="leftOff();"/>
 <input id="right" class="myButton2" type="button" value="" onmousedown="right();" onmouseup="rightOff();" onmouseout="rightOff();" ontouchstart="right();" ontouchend="rightOff();"/>
 <input id="down" class="myButton2" type="button" value="" onmousedown="down();" onmouseup="downOff();" onmouseout="downOff();" ontouchstart="down();" ontouchend="downOff();"/>
 <input id="up" class="myButton2" type="button" value="" onmousedown="up();" onmouseup="upOff();" onmouseout="upOff();" ontouchstart="up();" ontouchend="upOff();"/>
-<input id="q" class="myButton2" type="button" value="Continue" onmousedown="q();" onmouseup="qOff();" onmouseout="qOff();" ontouchstart="q();" ontouchend="qOff();" style="width: "128px"; height: "64px";"/>
 
-    <input id="one" class="myButton2" type="button" value="1" onclick="oneOff();"/>
-    <input id="two" class="myButton2" type="button" value="2" onclick="twoOff();"/>
-    <input id="three" class="myButton2" type="button" value="3" onclick="threeOff();"/>
-    <input id="four" class="myButton2" type="button" value="4" onclick="fourOff();"/>
-    
-    <input id="StatScreen" class="myButton2" type="button" value="Menu" onclick="Menu();"/>
-    
-    
+
+ 
+
     
 <input id="clickMe" class="myButton2" type="button" value="Click to start." onclick="playIt();"/>
 <i id="ls" class="fa fa-angle-double-left" aria-hidden="true" style="zindex: 2;"></i>
@@ -46,7 +39,8 @@
 
 
 	 </div>
-	  <script language="javascript" src="spawn.js"></script>
+    <script language="javascript" src="spawn.js"></script>
+    	<script language="javascript" src="mouse.js"></script>
 	  <script language="javascript" src="update.js"></script>
 	  <script language="javascript" src="classes.js"></script>
 		<script language="javascript" src="script.js"></script>

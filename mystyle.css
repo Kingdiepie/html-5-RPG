@@ -1,3 +1,7 @@
+#white {
+  color: white;
+}
+
 #canvas {
   position: relative;
   zindex: 2;
@@ -145,7 +149,7 @@
   height: 128px;
   left: 100px;
   position: absolute;
-  top: 490px;
+  top: 612px;
   zindex: 2;
 }
 #one
@@ -153,7 +157,7 @@
 
   left: 230px;
   position: absolute;
-  top: 490px;
+  top: 612px;
   zindex: 2;
   height: 128px;
   width: 128px;
@@ -162,7 +166,7 @@
 {
   left: 360px;
   position: absolute;
-  top: 490px;
+  top: 612px;
   zindex: 2;
   height: 128px;
   width: 128px;
@@ -171,7 +175,7 @@
 {
   left: 490px;
   position: absolute;
-  top: 490px;
+  top: 612px;
   zindex: 2;
   height: 128px;
   width: 128px;
@@ -180,7 +184,7 @@
 {
   left: 620px;
   position: absolute;
-  top: 490px;
+  top: 612px;
   zindex: 2;
   height: 128px;
   width: 128px;
@@ -189,7 +193,7 @@
 {
   left: 750px;
   position: absolute;
-  top: 490px;
+  top: 612px;
   zindex: 2;
   height: 128px;
   width: 128px;

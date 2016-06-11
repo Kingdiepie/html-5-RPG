@@ -1,13 +1,10 @@
+
 ///////////////////////////////////Canvases///////////////////////////////////
 
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-var oldcanvas = {
-  width: 988,
-  height: 480
-};
 canvas.width = 988;
-canvas.height = 480;
+canvas.height = 610;
 var start = false;
 var pause = false;
 var touchX=0;
@@ -20,10 +17,10 @@ window.addEventListener("keydown", function(e) {
     }
 }, false);
 
-///////////////////////////////////Canvases///////////////////////////////////
-////////////////////////////////////Map Fields//////////////////////////////////
+ctx.font = "32px New Rocker";
 
-//tell the program what map to change to when the player leaves it's current area.
+///////////////////////////////////Canvases/////////////////////////////////////
+////////////////////////////////////Map Fields//////////////////////////////////
 var mapCordsX = 0;
 var mapCordsY = 4;
 var mapXmin = 0;
@@ -32,8 +29,10 @@ var mapYmin = 0;
 var mapYmax = 4;
 var shopO =  false; 
 var TavernO = false;
+var mapScrollY = 250;
 var oldXcord=mapCordsX;
 var oldYcord=mapCordsY;
+var stats=false;
 ///////////////////////////////////Map Fields///////////////////////////////////
 //////////////////////////////////Images////////////////////////////////////////
 
@@ -115,17 +114,17 @@ heroImage.onload = function() {
         var heroImage10 = new Image();
         var heroImage11 = new Image();
         var heroImage12 = new Image();
-        heroImage1.src = "images/sprite01north.PNG";
-        heroImage2.src = "images/sprite01FT1north.PNG";
-        heroImage3.src = "images/sprite01FT2north.PNG";
+      heroImage1.src = "images/sprite01north.PNG";
+      heroImage2.src = "images/sprite01FT1north.PNG";
+      heroImage3.src = "images/sprite01FT2north.PNG";
 	    heroImage4.src = "images/sprite01west.PNG";
 	    heroImage5.src = "images/sprite01westFT1.PN.PNG";
 	    heroImage6.src = "images/sprite01westFT2.PN.PNG";
-  	    heroImage7.src = "images/sprite01east.PNG";
-       	heroImage8.src = "images/sprite01eastFT1.PN.PNG";
-        heroImage9.src = "images/sprite01eastFT2.PN.PNG";
+      heroImage7.src = "images/sprite01east.PNG";
+    	heroImage8.src = "images/sprite01eastFT1.PN.PNG";
+      heroImage9.src = "images/sprite01eastFT2.PN.PNG";
  	    heroImage10.src = "images/sprite01southFT1.PN.PNG";
-      	heroImage11.src = "images/sprite01south.PNG";
+      heroImage11.src = "images/sprite01south.PNG";
     	heroImage12.src = "images/sprite01southFT2.PN.PNG";
 
 
@@ -190,6 +189,9 @@ var hero = {
     lvl: 1,
     exp: 0
 };
+Tx = oldcanvas.width/2;
+Ty = oldcanvas.height/2;
+
 
 var heroSaved = {
     speed: 256,// movement in pixels per second
@@ -296,32 +298,44 @@ var keysDown = {};
 addEventListener("keydown", function(e) {
     keysDown[e.keyCode] = true;
 }, false);
+
 addEventListener("keyup", function(e) {
     delete keysDown[e.keyCode];
 }, false);
+
+canvas.addEventListener("mousedown", getPosition, false);
 /////////////////////////// Handle keyboard controls////////////////////////////
-///////////////////////////////Map Methods and Data//////////////////////////////////////
+///////////////////////////////Map Methods and Data/////////////////////////////
 
 var resetNorth = function() {
-    hero.y = 394;
+    hero.y = 383;
+    Ty = 383;
+    Tx = hero.x;
     mapCordsY -= 1;
     reset(); 
 };
 var resetEast = function() {
-    hero.x = 0;
+    hero.x = 48;
+    Tx = 48;
+    Tx = hero.x;
     mapCordsX -= 1;
     reset();    
 };
 var resetWest = function() {
     hero.x = oldcanvas.width-100;
+    Tx = oldcanvas.width-100;
+    Tx = hero.x;
     mapCordsX += 1;
     reset();
 };
 var resetSouth = function() {
-    hero.y = 0;
+    hero.y = 48;
+    Ty = 48;
+    Tx = hero.x;
     mapCordsY += 1;
     reset();    
 };
+
   var reset = function() {
     despawn(osHouseList);
     despawn(onscreenMonster);
@@ -341,7 +355,7 @@ for (var i = 0; i < 10; i++) {
 }
 //[monsters,bushes,rocks,water,NA,NA,NA,town]
 //tells update method what to spawn based on your map location
-//TODO: combine 314-338 with 339-363
+//TODO: combine lines.
 var mapData00 = [3,12,0,0,0,0,0,0];
 var mapData01 = [1,3,0,0,0,0,0,1];
 var mapData02 = [2,5,0,0,0,0,0,0];
@@ -407,9 +421,14 @@ var main = function() {
     render();
 
   if(start === true){
-      if(statsScreen === true){
-          render2();
-      }
+
+      if (stats === false )
+      render2();
+      
+          renderBar();
+          
+          
+          
     then = now;
 }
 }
@@ -433,3 +452,4 @@ main();
 
 //session storage= http://www.w3schools.com/html/html5_webstorage.asp
 };
+
