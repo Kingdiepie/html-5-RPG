@@ -6,4 +6,4 @@
 
 
 ***
-Project created by [Dominik Yakoubek](yakoubek.cf) 
+Project created by [Dominik Yakoubek](kingdiepie.github.io) 
