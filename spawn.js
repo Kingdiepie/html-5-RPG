@@ -107,6 +107,7 @@ var createHouses = function() {
       osInnList.push(inn1);
       osShopList.push(shop2);
       osTavernList.push(tavern2);
+	  osNPC.push(oldMan2);
     }
    
 };

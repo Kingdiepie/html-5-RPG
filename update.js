@@ -396,6 +396,7 @@ var Dialogue = function(d){
   dioChar = 0;
   pauseIt();
   renderDioBox();
+  hero.y+=20;
   
 };
 
@@ -677,6 +678,7 @@ var renderInventory = function(){
   ctx.fillText("+"+hero.hassesory.def,550,430);
   ctx.drawImage(hero.hweapon.img,420,250);
   ctx.drawImage(hero.hchest.img,420,300);
+  ctx.drawImage(hero.hheadgear.img,420,350);
   ctx.drawImage(hero.hheadgear.img,420,350);
   ctx.drawImage(hero.hassesory.img,420,400);
   ctx.textAlign="left"; 
